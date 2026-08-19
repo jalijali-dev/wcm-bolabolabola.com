@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Progress Roadmap — WCM 3 Version 2</title>
+<style>
+  body { margin: 0; padding: 24px; background: #f4f5f7; }
+</style>
+</head>
+<body>
+<h2 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;">Roadmap progress WCM 3 Version 2 (Bola Bola Bola) per 19 Agustus 2026, 7 fase dari pondasi hingga AI automation layer</h2>
+<div style="font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; max-width: 900px; margin: 0 auto; padding: 4px;">
+  <div style="margin-bottom: 20px; display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:10px;">
+    <div>
+      <div style="font-size: 20px; font-weight: 700; color: #18181b;">Progress Roadmap — WCM 3 Version 2</div>
+      <div style="font-size: 13px; color: #3f3f46; margin-top: 4px; font-weight: 600;">WEBSITE : Bola Bola Bola (bolabolabola.com)</div>
+      <div style="font-size: 13px; color: #71717a; margin-top: 2px;">Status per 19 Agustus 2026</div>
+    </div>
+    <div style="display:flex; gap:14px; font-size:12px; color: #71717a; align-items:center;">
+      <span style="display:flex; align-items:center; gap:6px;"><span style="width:10px;height:10px;border-radius:2px;background:#16a34a;display:inline-block;"></span>Selesai</span>
+      <span style="display:flex; align-items:center; gap:6px;"><span style="width:10px;height:10px;border-radius:2px;background:#f59e0b;display:inline-block;"></span>Sebagian</span>
+      <span style="display:flex; align-items:center; gap:6px;"><span style="width:10px;height:10px;border-radius:2px;background:#d4d4d8;display:inline-block;"></span>Belum mulai</span>
+    </div>
+  </div>
+
+  <div style="margin-bottom:18px; border:1px solid #fca5a5; background:#fef2f2; border-radius:10px; padding:12px 16px; font-size:12.5px; color:#7f1d1d; line-height:1.5;">
+    <strong>Catatan penting:</strong> folder proyek ini (<code>wcm3_version2</code>) adalah COPY literal dari folder WCM 3 V.1 (<code>wcm3_version1</code>/BolaUpdateIndonesia.com) — termasuk riwayat git, docs, dan semua progress yang sebelumnya tercatat di sana (git sudah push ke GitHub, cPanel sudah dikonfigurasi, artikel seed sudah masuk, mockup sudah diimplementasikan, dst). <strong>Progress itu milik WCM 3 V.1, bukan WCM 3 V.2.</strong> Roadmap ini ditulis ulang total 19 Agustus 2026 supaya mencerminkan status WCM 3 V.2 yang sebenarnya.
+  </div>
+
+  <div style="margin-bottom:18px; border:1px solid #93c5fd; background:#eff6ff; border-radius:10px; padding:12px 16px; font-size:12.5px; color:#1e3a8a; line-height:1.5;">
+    <strong>Update 19 Agustus 2026:</strong> WCM 3 V.2 dibootstrap sesuai Work Order 005 — "Tentakel 3" level V.2, SEJAJAR dengan WCM 2 V.2 (arenasport77.com), sama-sama cabang langsung dari WCM 1 V.2 (bravosport77.com). Backlink WCM 3 V.2 mengarah ke WCM 1 V.2 (bravosport77.com), bukan ke WCM 2 V.2. <code>cms-admin/</code> &amp; kerangka frontend di-clone dari WCM 2 V.1 (biangolahraga.com) per Work Order 005. Sesi ini melakukan rename brand/domain dasar (teks saja) dari warisan WCM 3 V.1 ke <strong>Bola Bola Bola / bolabolabola.com</strong> (nama brand masih asumsi kerja, belum final): tagline, <code>CMS_AI_ENC_SECRET</code> (digenerate ulang, baru), nama database (<code>DB_NAME</code> → <code>wcm3_version2</code>, beda dari <code>wcm3_version1</code>). <strong>Mockup frontend baru untuk WCM 3 V.2 belum dibuat</strong> — akan digarap sesi lanjutan.
+  </div>
+
+  <div style="position:relative; padding-left:34px;">
+    <div style="position:absolute; left:9px; top:8px; bottom:8px; width:2px; background: #e4e4e7;"></div>
+
+    <!-- Fase 0 -->
+    <div style="position:relative; margin-bottom:14px;">
+      <div style="position:absolute; left:-34px; top:16px; width:20px; height:20px; border-radius:50%; background:#d4d4d8; border:3px solid #fff; box-shadow:0 0 0 1px #d4d4d8;"></div>
+      <div style="border:1px solid #e4e4e7; border-radius:10px; padding:14px 16px; background: #fff;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px;">
+          <div style="font-weight:700; font-size:14.5px; color:#18181b;">Fase 0 — Pondasi</div>
+          <span style="font-size:11px; font-weight:700; color:#71717a; white-space:nowrap;">BELUM MULAI</span>
+        </div>
+        <div style="font-size:12.5px; color:#52525b; margin-top:4px; line-height:1.5;">
+          Domain bolabolabola.com — status pembelian belum dikonfirmasi. Git repo GitHub baru untuk WCM 3 V.2 belum dibuat (repo warisan di folder ini masih milik WCM 3 V.1 dan berbahaya kalau ke-push — lihat <code>docs/HANDOFF.md</code>). Akun cPanel &amp; hosting belum disiapkan. Status database <code>wcm3_version2</code> di MySQL dev lokal belum dikonfirmasi operator.
+        </div>
+      </div>
+    </div>
+
+    <!-- Fase 1 -->
+    <div style="position:relative; margin-bottom:14px;">
+      <div style="position:absolute; left:-34px; top:16px; width:20px; height:20px; border-radius:50%; background:#f59e0b; border:3px solid #fff; box-shadow:0 0 0 1px #f59e0b;"></div>
+      <div style="border:1px solid #f59e0b; border-radius:10px; padding:14px 16px; background: #fff;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px;">
+          <div style="font-weight:700; font-size:14.5px; color:#18181b;">Fase 1 — Backend: Schema &amp; Adaptasi CMS</div>
+          <span style="font-size:11px; font-weight:700; color:#f59e0b; white-space:nowrap;">SEBAGIAN</span>
+        </div>
+        <div style="font-size:12.5px; color:#52525b; margin-top:4px; line-height:1.5;">
+          Rename branding dasar sudah jalan sesi ini: <code>DB_NAME</code> → <code>wcm3_version2</code> (beda dari <code>wcm3_version1</code>), <code>CMS_AI_ENC_SECRET</code> digenerate ulang, <code>CMS_ADMIN_TAGLINE</code> → "Bola Bola Bola" (asumsi, belum final). Belum: konfirmasi database benar-benar kosong di MySQL, schema migration, audit modul cms-admin, <code>GROWTH_AGENT_DIGEST_TOKEN</code> masih placeholder.
+        </div>
+      </div>
+    </div>
+
+    <!-- Fase 2 -->
+    <div style="position:relative; margin-bottom:14px;">
+      <div style="position:absolute; left:-34px; top:16px; width:20px; height:20px; border-radius:50%; background:#d4d4d8; border:3px solid #fff; box-shadow:0 0 0 1px #d4d4d8;"></div>
+      <div style="border:1px solid #e4e4e7; border-radius:10px; padding:14px 16px; background: #fff;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px;">
+          <div style="font-weight:700; font-size:14.5px; color:#18181b;">Fase 2 — Backend: Isi Konten Struktural</div>
+          <span style="font-size:11px; font-weight:700; color:#71717a; white-space:nowrap;">BELUM MULAI</span>
+        </div>
+        <div style="font-size:12.5px; color:#52525b; margin-top:4px; line-height:1.5;">
+          Kategori nav final untuk WCM 3 V.2 belum dikonfirmasi operator (kode masih pakai warisan kategori WCM 3 V.1: Liga Indonesia/Liga Eropa/Timnas/Transfer). Belum ada satu kategori atau artikel pun untuk WCM 3 V.2 di database.
+        </div>
+      </div>
+    </div>
+
+    <!-- Fase 3 -->
+    <div style="position:relative; margin-bottom:14px;">
+      <div style="position:absolute; left:-34px; top:16px; width:20px; height:20px; border-radius:50%; background:#d4d4d8; border:3px solid #fff; box-shadow:0 0 0 1px #d4d4d8;"></div>
+      <div style="border:1px solid #e4e4e7; border-radius:10px; padding:14px 16px; background: #fff;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px;">
+          <div style="font-weight:700; font-size:14.5px; color:#18181b;">Fase 3 — Frontend: Mockup &amp; Implementasi</div>
+          <span style="font-size:11px; font-weight:700; color:#71717a; white-space:nowrap;">BELUM MULAI</span>
+        </div>
+        <div style="font-size:12.5px; color:#52525b; margin-top:4px; line-height:1.5;">
+          <strong>Mockup homepage baru untuk WCM 3 V.2 belum dibuat.</strong> Kode frontend saat ini (<code>index.php</code>, <code>site-header.php</code>, <code>site-footer.php</code>, <code>site.css</code>) masih 100% warisan implementasi WCM 3 V.1 (referensi visual NHK World) dengan brand text sudah diganti sekadar placeholder ("BOLA"/"BOLA") supaya tidak salah brand — BUKAN desain final WCM 3 V.2. Struktur permalink juga masih warisan (<code>/artikel/{slug}</code>, <code>/kategori/{slug}</code>).
+        </div>
+      </div>
+    </div>
+
+    <!-- Fase 4 -->
+    <div style="position:relative; margin-bottom:14px;">
+      <div style="position:absolute; left:-34px; top:16px; width:20px; height:20px; border-radius:50%; background:#f59e0b; border:3px solid #fff; box-shadow:0 0 0 1px #f59e0b;"></div>
+      <div style="border:1px solid #f59e0b; border-radius:10px; padding:14px 16px; background: #fff;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px;">
+          <div style="font-weight:700; font-size:14.5px; color:#18181b;">Fase 4 — Branding &amp; Polish</div>
+          <span style="font-size:11px; font-weight:700; color:#f59e0b; white-space:nowrap;">SEBAGIAN</span>
+        </div>
+        <div style="font-size:12.5px; color:#52525b; margin-top:4px; line-height:1.5;">
+          Nama brand kerja &amp; domain sudah ditentukan sementara: <strong>"Bola Bola Bola" / bolabolabola.com</strong> — brand name masih asumsi sesi ini, belum dikonfirmasi operator. Rename tagline/nama dasar di admin panel &amp; frontend sudah dilakukan (teks saja, bukan desain). Logo grafis, favicon, dan tema visual final masih sepenuhnya belum dikerjakan — menunggu mockup baru.
+        </div>
+      </div>
+    </div>
+
+    <!-- Fase 5 -->
+    <div style="position:relative; margin-bottom:14px;">
+      <div style="position:absolute; left:-34px; top:16px; width:20px; height:20px; border-radius:50%; background:#d4d4d8; border:3px solid #fff; box-shadow:0 0 0 1px #d4d4d8;"></div>
+      <div style="border:1px solid #e4e4e7; border-radius:10px; padding:14px 16px; background: #fff;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px;">
+          <div style="font-weight:700; font-size:14.5px; color:#18181b;">Fase 5 — Pra-Launch</div>
+          <span style="font-size:11px; font-weight:700; color:#71717a; white-space:nowrap;">BELUM MULAI</span>
+        </div>
+        <div style="font-size:12.5px; color:#52525b; margin-top:4px; line-height:1.5;">
+          Belum ada deploy prep genuinely milik WCM 3 V.2. <code>.git</code> folder ini masih riwayat warisan WCM 3 V.1 dengan remote yang salah — perlu dibersihkan manual oleh operator (lock file tidak bisa dihapus lewat Cowork, lihat <code>docs/HANDOFF.md</code>). <code>.cpanel.yml</code> sudah dikosongkan jadi placeholder supaya tidak accidental deploy ke docroot WCM 3 V.1. Isolasi infrastruktur (IP hosting, akun Cloudflare, akun cPanel, GSC) semuanya masih perlu diputuskan/disiapkan operator dari nol.
+        </div>
+      </div>
+    </div>
+
+    <!-- Fase 6 -->
+    <div style="position:relative;">
+      <div style="position:absolute; left:-34px; top:16px; width:20px; height:20px; border-radius:50%; background:#d4d4d8; border:3px solid #fff; box-shadow:0 0 0 1px #d4d4d8;"></div>
+      <div style="border:1px solid #e4e4e7; border-radius:10px; padding:14px 16px; background: #fff;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px;">
+          <div style="font-weight:700; font-size:14.5px; color:#18181b;">Fase 6 — AI Automation Layer</div>
+          <span style="font-size:11px; font-weight:700; color:#71717a; white-space:nowrap;">BELUM MULAI</span>
+        </div>
+        <div style="font-size:12.5px; color:#52525b; margin-top:4px; line-height:1.5;">
+          Modul Growth Agent ikut ter-clone/copy (kode-nya ada, prompt netral dari sononya). Belum aktif dipakai generate konten apapun untuk Bola Bola Bola; perlu disesuaikan ke konteks niche bola/olahraga umum begitu kategori final WCM 3 V.2 jelas.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#111827"/>
+      <stop offset="1" stop-color="#1e3a8a"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#bg)"/>
+  <circle cx="120" cy="380" r="110" fill="#ffffff" opacity="0.05"/>
+  <circle cx="680" cy="70" r="80" fill="#ffffff" opacity="0.06"/>
+  <g transform="translate(400,225)">
+    <circle r="100" fill="none" stroke="#ffffff" stroke-width="4" opacity="0.5"/>
+    <g fill="#ffffff">
+      <g id="star">
+        <polygon points="0,-14 3.3,-4.3 13.3,-4.3 5.2,1.6 8.2,11.3 0,5.4 -8.2,11.3 -5.2,1.6 -13.3,-4.3 -3.3,-4.3"/>
+      </g>
+      <use href="#star" transform="translate(0,-78)"/>
+      <use href="#star" transform="translate(39,-67.5) rotate(30)"/>
+      <use href="#star" transform="translate(67.5,-39) rotate(60)"/>
+      <use href="#star" transform="translate(78,0) rotate(90)"/>
+      <use href="#star" transform="translate(67.5,39) rotate(120)"/>
+      <use href="#star" transform="translate(39,67.5) rotate(150)"/>
+      <use href="#star" transform="translate(0,78) rotate(180)"/>
+      <use href="#star" transform="translate(-39,67.5) rotate(210)"/>
+      <use href="#star" transform="translate(-67.5,39) rotate(240)"/>
+      <use href="#star" transform="translate(-78,0) rotate(270)"/>
+      <use href="#star" transform="translate(-67.5,-39) rotate(300)"/>
+      <use href="#star" transform="translate(-39,-67.5) rotate(330)"/>
+    </g>
+  </g>
+</svg>

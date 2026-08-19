@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mockup Homepage — Bola Bola Bola (bolabolabola.com)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ==========================================================================
+   MOCKUP v2 — Bola Bola Bola (WCM 3 V.2, bolabolabola.com)
+   HTML statis, mandiri, BELUM disambung ke kode PHP (implementasi ke
+   index.php/site-header.php/site.css dikerjakan tim dev lewat Claude Code).
+
+   Revisi arahan operator: referensi layout diambil dari situs klub rugby
+   (header atas solid-color + logo besar, banner foto dengan strip di
+   bawahnya, widget daftar/list card, sidebar season/kategori, grid
+   Instagram, footer gelap dengan wordmark raksasa). Palet diganti ke
+MERAH + emas/gold sebagai aksen (nuansa mirip referensi klub rugby
+   yang dikasih operator — header solid merah, tombol CTA gold/tan),
+   sengaja tetap beda dari WCM 3 V.1 (merah juga, tapi tema light ala
+   NHK World, font Fraunces/Space Grotesk) lewat tipografi & layout yang
+   beda total: Anton (display/wordmark tebal ala logo klub olahraga),
+   Rajdhani (nav/label/badge, condensed-sporty), Inter (body/meta).
+
+   Kategori nav SUDAH DIKONFIRMASI operator (beda total dari WCM 3 V.1
+   yang liga-sentris): Sepak Bola, Basket, Voli, Bursa Transfer (lintas
+   cabang — sepak bola/basket/voli sekaligus). Mainin nama domain secara
+   harfiah ("bola bola bola" = beberapa cabang olahraga berbeda yang
+   sama-sama pakai bola), sekaligus jadi pembeda niche dari WCM 3 V.1
+   (sepak-bola-doang, dipecah per liga/wilayah) dan WCM 2 V.2 (multi-
+   cabang termasuk olahraga NON-bola). Brand title header/footer tetap
+   nama penuh "BOLA BOLA BOLA" (bukan singkatan "BBB").
+
+   LOGO: sudah dari operator — lambang kepala elang dalam lingkaran,
+   di-recolor dari navy ke MERAH (`--red`) biar senada sama header.
+   Disimpan sebagai `assets/img/logo-red.png`, dipakai di header (kecil)
+   & footer (besar). File asli/master (belum di-recolor) masih perlu
+   diminta ke operator dalam format vector (SVG/AI) kalau nanti butuh
+   varian warna lain atau ukuran sangat besar tanpa pecah.
+
+   Semua foto adalah placeholder gradient (bukan foto asli), semua judul/
+   isi adalah teks contoh — sesuai prinsip no-copy-paste-content.
+
+   REVISI 19 Agu 2026 (setelah implementasi PHP oleh devs, mockup ini
+   disesuaikan biar tetap jadi sumber kebenaran visual):
+   1. Utility bar paling atas ("Redaksi · Kontak · Kirim Berita") DIHAPUS
+      total — operator gak mau ada link itu di header.
+   2. Section Instagram grid di bawah DIHAPUS total.
+   3. Logo mark (header & footer) diganti jadi BULAT dengan border putih
+      tebal (kesan "bola"), bukan kotak — pakai object-fit:cover di dalam
+      circle mask, bukan object-fit:contain di kotak rounded.
+   ========================================================================== */
+
+:root{
+  --red:#d81922;
+  --red-dark:#a5120f;
+  --gold:#e0a53c;
+  --ink:#181414;
+  --grey-1:#5c5757;
+  --grey-2:#8a8383;
+  --line:#e6e2e2;
+  --bg:#ffffff;
+  --panel:#f7f2f2;
+  --dark:#15181f;
+  --dark-2:#1c2029;
+  --c1:#d81922; /* Sepak Bola */
+  --c2:#1a3d7c; /* Basket */
+  --c3:#1f7a4d; /* Voli */
+  --c4:#e0a53c; /* Bursa Transfer */
+  --f-display:'Anton', sans-serif;
+  --f-nav:'Rajdhani', sans-serif;
+  --f-body:'Inter', -apple-system, sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--f-body);background:var(--bg);color:var(--ink);}
+a{text-decoration:none;color:inherit;}
+img{max-width:100%;display:block;}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px;}
+
+/* ── Header (solid orange, ala referensi klub) ── */
+.hdr{background:linear-gradient(100deg,var(--red),var(--red-dark));}
+.hdr .wrap{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;gap:22px;flex-wrap:wrap;}
+.brand{display:flex;align-items:center;gap:12px;}
+.brand__mark{width:56px;height:56px;flex:0 0 auto;border-radius:50%;border:3px solid #fff;overflow:hidden;box-shadow:0 0 0 1px rgba(0,0,0,.15),0 2px 6px rgba(0,0,0,.25);background:#fff;}
+.brand__mark svg,.brand__mark img{width:100%;height:100%;display:block;object-fit:cover;}
+.brand__text{line-height:1;}
+.brand__title{font-family:var(--f-display);font-size:21px;letter-spacing:1.5px;color:#fff;text-transform:uppercase;white-space:nowrap;}
+.brand__sub{font-family:var(--f-nav);font-size:10.5px;font-weight:700;letter-spacing:3px;color:rgba(255,255,255,.82);margin-top:3px;text-transform:uppercase;}
+.nav{display:flex;gap:24px;flex-wrap:wrap;}
+.nav a{font-family:var(--f-nav);font-weight:700;font-size:15px;letter-spacing:.4px;color:#fff;text-transform:uppercase;text-align:center;line-height:1.3;}
+.nav a small{display:block;font-size:9.5px;font-weight:600;letter-spacing:1.5px;color:rgba(255,255,255,.65);}
+.nav a:hover,.nav a.active{color:var(--dark);}
+.nav a:hover small,.nav a.active small{color:rgba(28,20,8,.6);}
+
+/* ── Sub-utility strip (breadcrumb + CTA buttons, ala Tiket/Store) ── */
+.subbar{background:#fff;border-bottom:1px solid var(--line);}
+.subbar .wrap{display:flex;justify-content:space-between;align-items:center;padding:10px 20px;flex-wrap:wrap;gap:10px;}
+.breadcrumb{font-family:var(--f-nav);font-size:12.5px;font-weight:600;color:var(--grey-2);}
+.breadcrumb b{color:var(--ink);}
+.cta-row{display:flex;gap:10px;}
+.cta{display:flex;align-items:center;gap:6px;background:var(--gold);color:var(--dark);font-family:var(--f-nav);font-weight:700;font-size:12.5px;padding:8px 14px;border-radius:5px;letter-spacing:.3px;}
+.cta.outline{background:transparent;border:1.5px solid var(--red);color:var(--red-dark);}
+
+/* ── Hero banner ── */
+.hero-banner{position:relative;height:300px;background:linear-gradient(120deg,#3a1013,#15181f 60%,#1c2029);overflow:hidden;}
+.hero-banner::before{content:'';position:absolute;inset:0;background:
+  radial-gradient(ellipse 60% 80% at 20% 30%, rgba(216,25,34,.38), transparent 60%),
+  radial-gradient(ellipse 50% 70% at 85% 70%, rgba(224,165,60,.20), transparent 55%);}
+.hero-banner-title{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:0 20px;height:100%;display:flex;flex-direction:column;justify-content:center;}
+.hero-banner-title h1{font-family:var(--f-display);font-size:64px;letter-spacing:1.5px;color:#fff;text-transform:uppercase;line-height:1;}
+.hero-banner-title p{font-family:var(--f-nav);font-size:14px;font-weight:600;color:rgba(255,255,255,.7);letter-spacing:.5px;margin-top:8px;text-transform:uppercase;}
+
+/* Strip di bawah hero (pengganti strip sponsor pada referensi — dipakai buat chip kategori/topik) */
+.hero-strip{background:var(--dark-2);border-top:2px solid var(--red);}
+.hero-strip .wrap{display:flex;gap:0;overflow-x:auto;}
+.hero-strip a{flex:0 0 auto;padding:11px 22px;font-family:var(--f-nav);font-weight:700;font-size:13px;letter-spacing:.5px;color:rgba(255,255,255,.75);border-right:1px solid rgba(255,255,255,.08);text-transform:uppercase;white-space:nowrap;}
+.hero-strip a:hover,.hero-strip a.active{background:var(--red);color:#fff;}
+
+/* ── Main layout ── */
+.main-layout{display:grid;grid-template-columns:1fr 320px;gap:32px;padding:36px 0;}
+.section-head{display:flex;align-items:center;gap:12px;margin-bottom:18px;}
+.section-head h2{font-family:var(--f-display);font-size:26px;letter-spacing:.5px;color:var(--ink);text-transform:uppercase;}
+.section-head .bar{width:44px;height:5px;background:var(--red);border-radius:3px;}
+
+/* ── Match/news list card (ala jadwal pertandingan di referensi) ── */
+.news-list{display:flex;flex-direction:column;gap:12px;margin-bottom:36px;}
+.news-card{display:grid;grid-template-columns:110px 1fr auto;align-items:center;gap:16px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;}
+.news-card:nth-child(even){background:var(--panel);}
+.news-thumb{width:110px;height:78px;border-radius:8px;background:linear-gradient(135deg,#3a1013,#15181f);flex:0 0 auto;}
+.news-body h3{font-family:var(--f-body);font-weight:700;font-size:15px;line-height:1.4;color:var(--ink);margin-bottom:6px;}
+.news-meta{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.badge{font-family:var(--f-nav);font-weight:700;font-size:10.5px;letter-spacing:.5px;text-transform:uppercase;color:#fff;padding:3px 9px;border-radius:4px;}
+.badge.c1{background:var(--c1);}
+.badge.c2{background:var(--c2);}
+.badge.c3{background:var(--c3);color:#fff;}
+.badge.c4{background:var(--c4);}
+.news-time{font-family:var(--f-nav);font-size:12px;color:var(--grey-2);font-weight:600;}
+.news-cta{font-family:var(--f-nav);font-weight:700;font-size:12.5px;letter-spacing:.4px;text-transform:uppercase;background:var(--red);color:#fff;padding:9px 16px;border-radius:6px;white-space:nowrap;}
+.news-card:hover .news-cta{background:var(--dark);}
+
+/* ── Sidebar (ala widget "Season" di referensi) ── */
+.sidebar-box{background:#fff;border:1px solid var(--line);border-radius:10px;padding:20px;margin-bottom:22px;}
+.sidebar-box h3{font-family:var(--f-display);font-size:17px;letter-spacing:.5px;color:var(--ink);text-transform:uppercase;margin-bottom:6px;}
+.sidebar-box .bar{width:34px;height:4px;background:var(--red);border-radius:3px;margin-bottom:14px;}
+.sidebar-list a{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);font-family:var(--f-nav);font-weight:600;font-size:14.5px;color:var(--grey-1);}
+.sidebar-list a:last-child{border-bottom:none;}
+.sidebar-list a:hover,.sidebar-list a.active{color:var(--red-dark);}
+.sidebar-list a.active::after{content:'●';color:var(--red);font-size:9px;}
+
+.promo-banner{position:relative;border-radius:10px;overflow:hidden;height:150px;background:linear-gradient(135deg,var(--red),var(--gold));display:flex;align-items:flex-end;padding:14px;}
+.promo-banner span{font-family:var(--f-display);color:#fff;font-size:18px;letter-spacing:.5px;text-shadow:0 2px 8px rgba(0,0,0,.25);}
+
+/* ── Footer (dark, wordmark raksasa ala referensi) ── */
+.footer{background:var(--dark);color:#c9bba5;padding:48px 0 24px;}
+.footer-wordmark{text-align:center;margin-bottom:8px;}
+.footer-wordmark .logo-badge{width:76px;height:76px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;overflow:hidden;border:3px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.15),0 2px 8px rgba(0,0,0,.3);background:#fff;}
+.footer-wordmark h2{font-family:var(--f-display);font-size:46px;letter-spacing:2px;color:#fff;text-transform:uppercase;line-height:1;}
+.footer-wordmark p{font-family:var(--f-nav);font-size:12px;font-weight:700;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-top:8px;}
+
+.footer-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:20px;margin:40px 0 30px;padding-top:34px;border-top:1px solid rgba(255,255,255,.08);}
+.footer-grid h5{color:#fff;font-family:var(--f-nav);font-weight:700;font-size:13px;letter-spacing:.5px;margin-bottom:10px;text-transform:uppercase;}
+.footer-grid a{display:block;font-size:12.5px;color:#a2957f;padding:4px 0;}
+.footer-grid a:hover{color:var(--gold);}
+
+.footer-bottom{border-top:1px solid rgba(255,255,255,.08);padding-top:18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.footer-bottom .socials{display:flex;gap:14px;}
+.footer-bottom .socials a{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;color:#fff;}
+.footer-bottom .copy{font-size:11.5px;color:#7a6e5c;font-family:var(--f-nav);}
+
+@media (max-width:900px){
+  .main-layout{grid-template-columns:1fr;}
+  .news-card{grid-template-columns:80px 1fr;}
+  .news-cta{grid-column:1 / -1;justify-self:start;}
+  .social-grid{grid-template-columns:repeat(3,1fr);}
+  .footer-grid{grid-template-columns:repeat(2,1fr);}
+  .hero-banner-title h1{font-size:42px;}
+  .nav{gap:14px;}
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="wrap">
+    <a href="#" class="brand">
+      <span class="brand__mark">
+        <img src="../assets/img/logo-red.png" alt="Bola Bola Bola">
+      </span>
+      <!-- Logo asli dari operator (elang kepala, lingkaran) — di-recolor merah
+           supaya senada sama header. File sumber PNG ada di assets/img/logo-red.png. -->
+      <span class="brand__text">
+        <span class="brand__title">BOLA BOLA BOLA</span>
+        <span class="brand__sub">Update Bola &amp; Olahraga</span>
+      </span>
+    </a>
+    <nav class="nav" aria-label="Navigasi utama">
+      <a href="#" class="active">Beranda<small>HOME</small></a>
+      <a href="#">Sepak Bola<small>FOOTBALL</small></a>
+      <a href="#">Basket<small>BASKETBALL</small></a>
+      <a href="#">Voli<small>VOLLEYBALL</small></a>
+      <a href="#">Bursa Transfer<small>TRANSFER</small></a>
+    </nav>
+  </div>
+</header>
+
+<div class="subbar">
+  <div class="wrap">
+    <div class="breadcrumb"><b>Beranda</b> &nbsp;›&nbsp; Berita Terbaru</div>
+    <div class="cta-row">
+      <a href="#" class="cta outline">Cari Berita</a>
+      <a href="#" class="cta">Berlangganan</a>
+    </div>
+  </div>
+</div>
+
+<div class="hero-banner">
+  <div class="hero-banner-title">
+    <h1>Sorotan Utama</h1>
+    <p>Berita bola &amp; olahraga terkini — diperbarui setiap hari</p>
+  </div>
+</div>
+<div class="hero-strip">
+  <div class="wrap">
+    <a href="#" class="active">Sepak Bola</a>
+    <a href="#">Basket</a>
+    <a href="#">Voli</a>
+    <a href="#">Bursa Transfer</a>
+    <a href="#">Jadwal &amp; Hasil</a>
+    <a href="#">Klasemen</a>
+  </div>
+</div>
+
+<main class="wrap main-layout">
+  <div>
+
+    <div class="section-head"><span class="bar"></span><h2>Berita Terbaru</h2></div>
+    <div class="news-list">
+      <div class="news-card">
+        <div class="news-thumb"></div>
+        <div class="news-body">
+          <h3>Contoh judul berita placeholder — sepak bola pekan ini</h3>
+          <div class="news-meta"><span class="badge c1">Sepak Bola</span><span class="news-time">2 jam lalu</span></div>
+        </div>
+        <a href="#" class="news-cta">Baca</a>
+      </div>
+      <div class="news-card">
+        <div class="news-thumb"></div>
+        <div class="news-body">
+          <h3>Contoh judul berita placeholder — sorotan liga basket</h3>
+          <div class="news-meta"><span class="badge c2">Basket</span><span class="news-time">4 jam lalu</span></div>
+        </div>
+        <a href="#" class="news-cta">Baca</a>
+      </div>
+      <div class="news-card">
+        <div class="news-thumb"></div>
+        <div class="news-body">
+          <h3>Contoh judul berita placeholder — hasil pertandingan voli</h3>
+          <div class="news-meta"><span class="badge c3">Voli</span><span class="news-time">6 jam lalu</span></div>
+        </div>
+        <a href="#" class="news-cta">Baca</a>
+      </div>
+      <div class="news-card">
+        <div class="news-thumb"></div>
+        <div class="news-body">
+          <h3>Contoh judul berita placeholder — kabar bursa transfer</h3>
+          <div class="news-meta"><span class="badge c4">Bursa Transfer</span><span class="news-time">9 jam lalu</span></div>
+        </div>
+        <a href="#" class="news-cta">Baca</a>
+      </div>
+    </div>
+
+    <div class="section-head"><span class="bar"></span><h2>Sorotan Pekan Ini</h2></div>
+    <div class="news-list">
+      <div class="news-card">
+        <div class="news-thumb"></div>
+        <div class="news-body">
+          <h3>Contoh judul sorotan placeholder satu</h3>
+          <div class="news-meta"><span class="badge c1">Sepak Bola</span><span class="news-time">1 hari lalu</span></div>
+        </div>
+        <a href="#" class="news-cta">Baca</a>
+      </div>
+      <div class="news-card">
+        <div class="news-thumb"></div>
+        <div class="news-body">
+          <h3>Contoh judul sorotan placeholder dua</h3>
+          <div class="news-meta"><span class="badge c4">Bursa Transfer</span><span class="news-time">1 hari lalu</span></div>
+        </div>
+        <a href="#" class="news-cta">Baca</a>
+      </div>
+    </div>
+
+  </div>
+
+  <aside>
+    <div class="sidebar-box">
+      <h3>Kategori</h3>
+      <div class="bar"></div>
+      <div class="sidebar-list">
+        <a href="#" class="active">Sepak Bola</a>
+        <a href="#">Basket</a>
+        <a href="#">Voli</a>
+        <a href="#">Bursa Transfer</a>
+      </div>
+    </div>
+    <div class="sidebar-box">
+      <h3>Terpopuler</h3>
+      <div class="bar"></div>
+      <div class="sidebar-list">
+        <a href="#">Contoh judul populer satu</a>
+        <a href="#">Contoh judul populer dua</a>
+        <a href="#">Contoh judul populer tiga</a>
+        <a href="#">Contoh judul populer empat</a>
+      </div>
+    </div>
+    <div class="promo-banner"><span>Jadwal &amp; Hasil Liga →</span></div>
+  </aside>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-wordmark">
+      <div class="logo-badge">
+        <img src="../assets/img/logo-red.png" alt="Bola Bola Bola" style="width:100%;height:100%;object-fit:cover;">
+      </div>
+      <h2>Bola Bola Bola</h2>
+      <p>Update Bola &amp; Olahraga Terkini</p>
+    </div>
+
+    <div class="footer-grid">
+      <div>
+        <h5>Berita</h5>
+        <a href="#">Terbaru</a>
+        <a href="#">Sorotan</a>
+        <a href="#">Terpopuler</a>
+      </div>
+      <div>
+        <h5>Kategori</h5>
+        <a href="#">Sepak Bola</a>
+        <a href="#">Basket</a>
+        <a href="#">Voli</a>
+        <a href="#">Bursa Transfer</a>
+      </div>
+      <div>
+        <h5>Tentang</h5>
+        <a href="#">Redaksi</a>
+        <a href="#">Kontak</a>
+        <a href="#">Kirim Berita</a>
+      </div>
+      <div>
+        <h5>Legal</h5>
+        <a href="#">Kebijakan Privasi</a>
+        <a href="#">Ketentuan Layanan</a>
+      </div>
+      <div>
+        <h5>Ikuti Kami</h5>
+        <a href="#">Instagram</a>
+        <a href="#">Twitter / X</a>
+        <a href="#">YouTube</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="copy">&copy; 2026 Bola Bola Bola (bolabolabola.com). Mockup — belum live.</div>
+      <div class="socials">
+        <a href="#" aria-label="Instagram">IG</a>
+        <a href="#" aria-label="Twitter">X</a>
+        <a href="#" aria-label="YouTube">YT</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

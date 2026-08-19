@@ -1,0 +1,29 @@
+# Secrets — never commit real credentials. Only *.example templates are
+# tracked; copy + fill in manually on each environment (see
+# cms-admin/config/*.example and docs/HANDOFF.md).
+cms-admin/config/database.php
+cms-admin/config/app.php
+
+# Media uploads — grows on the server, not part of source control. Keep
+# uploads/media/index.php tracked (blank directory-listing blocker) — git
+# negation needs the parent dir un-ignored too, not just the leaf file.
+uploads/*
+!uploads/media/
+uploads/media/*
+!uploads/media/index.php
+
+# One-time / dev-only scripts — never meant to live permanently anywhere,
+# local or production. Delete after running, don't commit.
+_seed-categories-articles.php
+_cleanup-fresh-start.php
+_*.php
+
+# OS / editor cruft
+.DS_Store
+**/.DS_Store
+
+# Local Cowork/session tooling — not part of the deployed app.
+.claude/
+
+# Leftover debris from git-remote cleanup attempts — not source.
+_to_delete/

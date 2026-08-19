@@ -1,0 +1,177 @@
+/* ==========================================================================
+   Bola Bola Bola — public frontend stylesheet
+   Implements the approved mockup v2 (docs/homepage-mockup-v2.html): solid
+   red/gold header ala klub olahraga, Anton (display/wordmark) + Rajdhani
+   (nav/label/badge) + Inter (body). 4 kategori final: Sepak Bola, Basket,
+   Voli, Bursa Transfer. Category accent colors (c1-c4) map to
+   wpm_category_color_class() in includes/site-bootstrap.php — do not rename
+   slugs/colors here without updating that function too.
+   ========================================================================== */
+
+:root{
+  --red:#d81922;
+  --red-dark:#a5120f;
+  --gold:#e0a53c;
+  --ink:#181414;
+  --grey-1:#5c5757;
+  --grey-2:#8a8383;
+  --line:#e6e2e2;
+  --bg:#ffffff;
+  --panel:#f7f2f2;
+  --dark:#15181f;
+  --dark-2:#1c2029;
+  --c1:#d81922; /* Sepak Bola */
+  --c2:#1a3d7c; /* Basket */
+  --c3:#1f7a4d; /* Voli */
+  --c4:#e0a53c; /* Bursa Transfer */
+  --f-display:'Anton', sans-serif;
+  --f-nav:'Rajdhani', sans-serif;
+  --f-body:'Inter', -apple-system, sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--f-body);background:var(--bg);color:var(--ink);}
+a{text-decoration:none;color:inherit;}
+img{max-width:100%;display:block;}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px;}
+
+/* ── Photo placeholder box: real <img> via wpm_image_url(), styled so a
+   missing/placeholder image still reads as a clean tile instead of a
+   broken box. ── */
+.wpm-photo{background:var(--panel);overflow:hidden;}
+.wpm-photo img{width:100%;height:100%;object-fit:cover;}
+
+/* ── Header (solid red gradient) ── */
+.hdr{background:linear-gradient(100deg,var(--red),var(--red-dark));}
+.hdr .wrap{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;gap:22px;flex-wrap:wrap;}
+.brand{display:flex;align-items:center;gap:12px;}
+.brand__mark{width:56px;height:56px;flex:0 0 auto;border-radius:50%;border:3px solid #fff;overflow:hidden;box-shadow:0 0 0 1px rgba(0,0,0,.15),0 2px 6px rgba(0,0,0,.25);background:#fff;}
+.brand__mark svg,.brand__mark img{width:100%;height:100%;display:block;object-fit:cover;}
+.brand__text{line-height:1;}
+.brand__title{font-family:var(--f-display);font-size:21px;letter-spacing:1.5px;color:#fff;text-transform:uppercase;white-space:nowrap;}
+.brand__sub{font-family:var(--f-nav);font-size:10.5px;font-weight:700;letter-spacing:3px;color:rgba(255,255,255,.82);margin-top:3px;text-transform:uppercase;}
+.nav{display:flex;gap:24px;flex-wrap:wrap;}
+.nav a{font-family:var(--f-nav);font-weight:700;font-size:15px;letter-spacing:.4px;color:#fff;text-transform:uppercase;text-align:center;line-height:1.3;}
+.nav a small{display:block;font-size:9.5px;font-weight:600;letter-spacing:1.5px;color:rgba(255,255,255,.65);}
+.nav a:hover,.nav a.is-active{color:var(--dark);}
+.nav a:hover small,.nav a.is-active small{color:rgba(28,20,8,.6);}
+
+/* ── Sub-utility strip (breadcrumb + CTA buttons) ── */
+.subbar{background:#fff;border-bottom:1px solid var(--line);}
+.subbar .wrap{display:flex;justify-content:space-between;align-items:center;padding:10px 20px;flex-wrap:wrap;gap:10px;}
+.breadcrumb{font-family:var(--f-nav);font-size:12.5px;font-weight:600;color:var(--grey-2);}
+.breadcrumb a{color:var(--grey-2);}
+.breadcrumb b{color:var(--ink);}
+.cta-row{display:flex;gap:10px;}
+.cta{display:flex;align-items:center;gap:6px;background:var(--gold);color:var(--dark);font-family:var(--f-nav);font-weight:700;font-size:12.5px;padding:8px 14px;border-radius:5px;letter-spacing:.3px;}
+.cta.outline{background:transparent;border:1.5px solid var(--red);color:var(--red-dark);}
+.wpm-search{display:flex;align-items:center;gap:8px;}
+.wpm-search input{border:1.5px solid var(--red);border-radius:5px;padding:7px 10px;font-size:13px;font-family:var(--f-body);width:160px;color:var(--ink);outline:none;}
+
+/* ── Hero banner ── */
+.hero-banner{position:relative;height:260px;background:linear-gradient(120deg,#3a1013,#15181f 60%,#1c2029);overflow:hidden;}
+.hero-banner::before{content:'';position:absolute;inset:0;background:
+  radial-gradient(ellipse 60% 80% at 20% 30%, rgba(216,25,34,.38), transparent 60%),
+  radial-gradient(ellipse 50% 70% at 85% 70%, rgba(224,165,60,.20), transparent 55%);}
+.hero-banner-title{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:0 20px;height:100%;display:flex;flex-direction:column;justify-content:center;}
+.hero-banner-title h1{font-family:var(--f-display);font-size:52px;letter-spacing:1.5px;color:#fff;text-transform:uppercase;line-height:1;}
+.hero-banner-title p{font-family:var(--f-nav);font-size:14px;font-weight:600;color:rgba(255,255,255,.7);letter-spacing:.5px;margin-top:8px;text-transform:uppercase;}
+
+/* Strip di bawah hero — kategori/topik */
+.hero-strip{background:var(--dark-2);border-top:2px solid var(--red);}
+.hero-strip .wrap{display:flex;gap:0;overflow-x:auto;}
+.hero-strip a{flex:0 0 auto;padding:11px 22px;font-family:var(--f-nav);font-weight:700;font-size:13px;letter-spacing:.5px;color:rgba(255,255,255,.75);border-right:1px solid rgba(255,255,255,.08);text-transform:uppercase;white-space:nowrap;}
+.hero-strip a:hover,.hero-strip a.is-active{background:var(--red);color:#fff;}
+
+/* ── Main layout ── */
+.main-layout{display:grid;grid-template-columns:1fr 320px;gap:32px;padding:36px 0;}
+.section-head{display:flex;align-items:center;gap:12px;margin-bottom:18px;}
+.section-head h2{font-family:var(--f-display);font-size:26px;letter-spacing:.5px;color:var(--ink);text-transform:uppercase;}
+.section-head .bar{width:44px;height:5px;background:var(--red);border-radius:3px;}
+
+/* ── News list card ── */
+.news-list{display:flex;flex-direction:column;gap:12px;margin-bottom:36px;}
+.news-card{display:grid;grid-template-columns:110px 1fr auto;align-items:center;gap:16px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;}
+.news-card:nth-child(even){background:var(--panel);}
+.news-thumb{width:110px;height:78px;border-radius:8px;flex:0 0 auto;}
+.news-body h3{font-family:var(--f-body);font-weight:700;font-size:15px;line-height:1.4;color:var(--ink);margin-bottom:6px;}
+.news-body h3 a{color:inherit;}
+.news-meta{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.badge{font-family:var(--f-nav);font-weight:700;font-size:10.5px;letter-spacing:.5px;text-transform:uppercase;color:#fff;padding:3px 9px;border-radius:4px;}
+.badge.c1{background:var(--c1);}
+.badge.c2{background:var(--c2);}
+.badge.c3{background:var(--c3);color:#fff;}
+.badge.c4{background:var(--c4);}
+.news-time{font-family:var(--f-nav);font-size:12px;color:var(--grey-2);font-weight:600;}
+.news-cta{font-family:var(--f-nav);font-weight:700;font-size:12.5px;letter-spacing:.4px;text-transform:uppercase;background:var(--red);color:#fff;padding:9px 16px;border-radius:6px;white-space:nowrap;}
+.news-card:hover .news-cta{background:var(--dark);}
+
+/* ── Sidebar ── */
+.sidebar-box{background:#fff;border:1px solid var(--line);border-radius:10px;padding:20px;margin-bottom:22px;}
+.sidebar-box h3{font-family:var(--f-display);font-size:17px;letter-spacing:.5px;color:var(--ink);text-transform:uppercase;margin-bottom:6px;}
+.sidebar-box .bar{width:34px;height:4px;background:var(--red);border-radius:3px;margin-bottom:14px;}
+.sidebar-list a{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);font-family:var(--f-nav);font-weight:600;font-size:14.5px;color:var(--grey-1);gap:10px;}
+.sidebar-list a:last-child{border-bottom:none;}
+.sidebar-list a:hover,.sidebar-list a.is-active{color:var(--red-dark);}
+.sidebar-list a.is-active::after{content:'●';color:var(--red);font-size:9px;}
+.sidebar-empty{color:var(--grey-2);font-size:13px;padding:8px 0;}
+
+.promo-banner{position:relative;border-radius:10px;overflow:hidden;height:150px;background:linear-gradient(135deg,var(--red),var(--gold));display:flex;align-items:flex-end;padding:14px;}
+.promo-banner span{font-family:var(--f-display);color:#fff;font-size:18px;letter-spacing:.5px;text-shadow:0 2px 8px rgba(0,0,0,.25);}
+
+/* ── Footer (dark, wordmark raksasa) ── */
+.footer{background:var(--dark);color:#c9bba5;padding:48px 0 24px;}
+.footer-wordmark{text-align:center;margin-bottom:8px;}
+.footer-wordmark .logo-badge{width:76px;height:76px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;overflow:hidden;border:3px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.15),0 2px 8px rgba(0,0,0,.3);background:#fff;}
+.footer-wordmark h2{font-family:var(--f-display);font-size:46px;letter-spacing:2px;color:#fff;text-transform:uppercase;line-height:1;}
+.footer-wordmark p{font-family:var(--f-nav);font-size:12px;font-weight:700;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-top:8px;}
+
+.footer-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:20px;margin:40px 0 30px;padding-top:34px;border-top:1px solid rgba(255,255,255,.08);}
+.footer-grid h5{color:#fff;font-family:var(--f-nav);font-weight:700;font-size:13px;letter-spacing:.5px;margin-bottom:10px;text-transform:uppercase;}
+.footer-grid a{display:block;font-size:12.5px;color:#a2957f;padding:4px 0;}
+.footer-grid a:hover{color:var(--gold);}
+
+.footer-bottom{border-top:1px solid rgba(255,255,255,.08);padding-top:18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;max-width:1180px;margin:0 auto;padding-left:20px;padding-right:20px;}
+.footer-bottom .socials{display:flex;gap:14px;}
+.footer-bottom .socials a{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;color:#fff;}
+.footer-bottom .copy{font-size:11.5px;color:#7a6e5c;font-family:var(--f-nav);}
+
+/* ── Breadcrumb / page title (kategori & artikel listing) ── */
+.wpm-page-title{font-family:var(--f-display);font-size:26px;letter-spacing:.5px;text-transform:uppercase;margin:20px 0;}
+
+/* ── Pagination ── */
+.wpm-pagination{display:flex;gap:8px;margin-top:20px;}
+.wpm-pagination a,.wpm-pagination span{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:4px;background:#fff;border:1px solid var(--line);font-size:13px;font-weight:700;font-family:var(--f-nav);}
+.wpm-pagination span.is-active{background:var(--red);color:#fff;border-color:var(--red);}
+
+/* ── Popular sidebar rows (article/kategori pages) ── */
+.wpm-p-row{display:flex;gap:10px;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--line);}
+.wpm-p-row:last-child{border-bottom:none;}
+.wpm-p-row__rank{font-family:var(--f-nav);font-size:13px;font-weight:800;color:var(--red);width:18px;flex-shrink:0;}
+.wpm-p-row__title{font-family:var(--f-body);font-size:13.5px;font-weight:600;line-height:1.35;}
+
+/* ── Article page ── */
+.wpm-article{display:grid;grid-template-columns:1fr 320px;gap:32px;margin-top:6px;}
+.wpm-article__title{font-family:var(--f-display);font-size:32px;font-weight:400;text-transform:uppercase;line-height:1.15;margin-bottom:10px;letter-spacing:.3px;}
+.wpm-article__meta{font-family:var(--f-nav);font-size:12.5px;color:var(--grey-2);margin-bottom:16px;font-weight:600;}
+.wpm-article__cover{width:100%;border-radius:8px;margin-bottom:18px;background:var(--panel);}
+.wpm-article__body{font-size:15.5px;line-height:1.8;color:var(--ink);}
+.wpm-article__body p{margin-bottom:16px;}
+.wpm-article__body img{border-radius:6px;margin:16px 0;}
+
+/* ── Ad slots ── */
+.wpm-ad-slot{display:block;margin-bottom:20px;border-radius:6px;overflow:hidden;background:#fff;border:1px solid var(--line);}
+.wpm-ad__label{display:block;font-size:10px;color:var(--grey-2);padding:4px 8px;}
+
+/* ── Search page ── */
+.wpm-search-list{display:flex;flex-direction:column;gap:12px;max-width:760px;}
+
+/* ── Responsive ── */
+@media (max-width:900px){
+  .main-layout{grid-template-columns:1fr;}
+  .wpm-article{grid-template-columns:1fr;}
+  .news-card{grid-template-columns:80px 1fr;}
+  .news-cta{grid-column:1 / -1;justify-self:start;}
+  .footer-grid{grid-template-columns:repeat(2,1fr);}
+  .hero-banner-title h1{font-size:38px;}
+  .nav{gap:14px;}
+}

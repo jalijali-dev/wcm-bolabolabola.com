@@ -1,0 +1,21 @@
+RewriteEngine On
+
+# Blokir akses publik ke file/folder yang ikut ter-deploy (rsync .cpanel.yml
+# nyalin semuanya) tapi tidak boleh diakses langsung lewat browser — bukan
+# bagian runtime aplikasi, cuma dokumentasi/riwayat git.
+RedirectMatch 404 /\.git
+RedirectMatch 404 ^/docs/
+RedirectMatch 404 ^/CLAUDE\.md$
+RedirectMatch 404 ^/\.cpanel\.yml$
+
+# NOTE: struktur permalink final belum dikonfirmasi operator (lihat
+# docs/HANDOFF.md). Sementara pakai pola yang sama dengan wcm1_version1
+# (/artikel/{slug}, /kategori/{slug}) supaya frontend bisa langsung dites —
+# GANTI di sini kalau operator kasih struktur lain (misal /berita/{slug}
+# atau /{kategori}/{slug}).
+
+# /artikel/{slug} -> artikel.php?slug={slug}
+RewriteRule ^artikel/([a-zA-Z0-9\-]+)/?$ artikel.php?slug=$1 [L,QSA]
+
+# /kategori/{slug} -> kategori.php?slug={slug}
+RewriteRule ^kategori/([a-zA-Z0-9\-]+)/?$ kategori.php?slug=$1 [L,QSA]
