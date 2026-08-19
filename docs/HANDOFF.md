@@ -164,26 +164,49 @@ sebenarnya.
       kedua tempat.
 
 ### 6. Deploy Workflow
-- [ ] **`.git` di folder ini masih riwayat warisan WCM 3 V.1** — remote
-      `origin` menunjuk ke repo GitHub ASLI WCM 3 V.1
-      (`jalijali-dev/wcm-bolaupdateindonesia.com.git`). Sesi ini mencoba
-      `git remote remove origin` tapi GAGAL karena lock file
-      (`.git/packed-refs.lock`, `.git/refs/remotes/origin/main.lock`)
-      yang tidak bisa dihapus lewat tool Cowork (permission ditolak).
-      **Operator perlu hapus lock file itu manual di terminal biasa**,
-      lalu jalankan `git remote remove origin` atau arahkan ke repo GitHub
-      WCM 3 V.2 yang baru. **JANGAN git push dari folder ini sebelum ini
-      dibereskan** — riwayat commit juga masih riwayat WCM 3 V.1, idealnya
-      di-reset bersih (pola sama seperti yang pernah dilakukan di WCM 3
-      V.1 sendiri saat membersihkan riwayat WCM 2 warisan — pindahkan
-      `.git` lama ke folder backup di luar proyek, lalu `git init` ulang).
+- [x] **Repo GitHub baru untuk WCM 3 V.2 sudah dibuat operator** —
+      `https://github.com/jalijali-dev/wcm-bolabolabola.com.git` (kosong
+      saat dibuat). cPanel Git Version Control juga sudah dikonfigurasi
+      operator nunjuk ke situ.
+- [x] **Riwayat git lama (warisan WCM 3 V.1) sudah dibersihkan, initial
+      commit bersih sudah di-push** (20 Agu 2026):
+      1. `.gitignore` dicek dulu — sudah benar exclude
+         `cms-admin/config/database.php`, `cms-admin/config/app.php`
+         (kredensial), dan `uploads/*` (kecuali
+         `uploads/media/index.php`, blank-listing blocker yang memang
+         harus ikut ter-track). Ditambah 1 baris baru: `_to_delete/`
+         (debris sisa percobaan bersih-bersih remote sesi sebelumnya,
+         bukan source).
+      2. `.git` lama (riwayat + remote warisan WCM 3 V.1) DIPINDAH — bukan
+         dihapus — ke
+         `/Users/donnie/htdocs/docker-projects/_git-backups/wcm3_version2_git_backup_20260820`
+         (di luar folder proyek), kalau-kalau riwayat lama perlu dicek
+         lagi nanti.
+      3. `git init` ulang di folder ini → `git add -A` → dicek `git
+         status` (121 file staged, DIVERIFIKASI tidak ada
+         `cms-admin/config/database.php`/`app.php`, tidak ada isi
+         `uploads/` selain `uploads/media/index.php`, tidak ada
+         `_to_delete/`) → commit pertama: "Initial commit — WCM 3 V.2
+         Bola Bola Bola go-live prep" (commit `b1a442f`).
+      4. `git remote add origin
+         https://github.com/jalijali-dev/wcm-bolabolabola.com.git` →
+         `git branch -M main` → `git push -u origin main`. Push
+         berhasil (`* [new branch] main -> main`).
+      5. **Verifikasi pasca-push:** `git fetch origin` + `git ls-tree -r
+         origin/main --name-only` → tepat 121 file di remote (cocok
+         dengan commit lokal), tidak ada file kredensial/`_to_delete/`
+         ikut ter-push. `git status` bersih, branch `main` tracking
+         `origin/main`.
 - [x] `.cpanel.yml` ditulis ulang jadi placeholder (`DEPLOYPATH` warisan
       akun cPanel WCM 3 V.1 dihapus, diganti
-      `GANTI_DENGAN_AKUN_CPANEL_BOLABOLABOLA`) — supaya tidak ada risiko
-      accidental deploy ke docroot situs lain.
-- [ ] Repo GitHub baru untuk WCM 3 V.2 belum dibuat.
-- [ ] Akun cPanel & path docroot untuk bolabolabola.com belum
-      dikonfirmasi operator.
+      `GANTI_DENGAN_AKUN_CPANEL_BOLABOLABOLA`) — **BELUM diisi akun cPanel
+      asli bolabolabola.com**, operator perlu isi manual sebelum cPanel
+      Git Version Control bisa deploy sungguhan.
+- [ ] Akun cPanel & path docroot untuk bolabolabola.com — cPanel Git
+      Version Control sudah dikonfigurasi operator, tapi `.cpanel.yml`
+      di repo masih placeholder `DEPLOYPATH`. Perlu operator isi path
+      docroot asli lalu commit+push supaya deploy dari cPanel bisa
+      jalan.
 
 ### 7. SEO Dasar
 - [ ] Belum dikerjakan — robots.txt, sitemap, favicon.
@@ -202,15 +225,29 @@ sebenarnya.
 ## Yang perlu dikonfirmasi/dikerjakan operator sebelum lanjut
 
 1. Database `wcm3_version2` sudah dibuat kosong di MySQL dev lokal atau
-   belum?
+   belum? (Catatan: saat verifikasi browser tgl 19 Agu, database ini
+   ternyata SUDAH ADA isinya — beberapa artikel dengan meta_title
+   warisan "Bola Update Indonesia". Perlu diklarifikasi apakah ini
+   genuinely konten baru WCM 3 V.2 yang tinggal diedit meta title-nya,
+   atau harus di-TRUNCATE dan ditulis ulang dari nol.)
 2. Nama brand final untuk bolabolabola.com — "Bola Bola Bola" (asumsi
    sesi ini) atau nama lain?
-3. Kategori final WCM 3 V.2 — sama dengan WCM 3 V.1 (Liga
-   Indonesia/Liga Eropa/Timnas/Transfer) atau beda?
-4. Detail struktur permalink final.
-5. Akun Cloudflare — sama dengan WCM 2 V.2, atau baru?
-6. Akun cPanel & repo GitHub baru untuk WCM 3 V.2 (jangan pakai punya
-   WCM 3 V.1 — lihat catatan git remote di atas).
-7. Domain bolabolabola.com — sudah dibeli?
-8. Mockup frontend baru untuk WCM 3 V.2 — siapa/kapan dikerjakan (per
-   arahan sesi ini: tim dev lewat Claude Code, terpisah dari Cowork ini)?
+3. Detail struktur permalink final (saat ini masih pola warisan
+   `/artikel/{slug}`, `/kategori/{slug}`).
+4. Akun Cloudflare — sama dengan WCM 2 V.2, atau baru?
+5. Akun cPanel & path docroot asli untuk bolabolabola.com — repo GitHub
+   sudah ada & cPanel Git Version Control sudah dikonfigurasi, tapi
+   `.cpanel.yml` di repo masih placeholder `DEPLOYPATH`
+   (`GANTI_DENGAN_AKUN_CPANEL_BOLABOLABOLA`). Perlu diisi akun/path asli
+   sebelum deploy dari cPanel bisa jalan.
+6. Domain bolabolabola.com — sudah dibeli?
+7. Logo vector master (SVG/AI, belum di-recolor) — diminta ke operator
+   kalau nanti butuh varian warna lain atau ukuran sangat besar tanpa
+   pecah. Favicon publik juga masih warisan lama, belum disesuaikan.
+
+**Sudah selesai (tidak perlu ditanya lagi):** kategori final (Sepak
+Bola/Basket/Voli/Bursa Transfer), mockup frontend v2 (sudah final,
+disetujui, dan sudah diimplementasikan ke PHP — lihat bagian 5 di atas),
+repo GitHub baru WCM 3 V.2 (`jalijali-dev/wcm-bolabolabola.com`, sudah
+dibuat operator dan sudah di-push initial commit bersih — lihat bagian 6
+di atas).
