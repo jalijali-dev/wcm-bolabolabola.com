@@ -197,16 +197,19 @@ sebenarnya.
          dengan commit lokal), tidak ada file kredensial/`_to_delete/`
          ikut ter-push. `git status` bersih, branch `main` tracking
          `origin/main`.
-- [x] `.cpanel.yml` ditulis ulang jadi placeholder (`DEPLOYPATH` warisan
-      akun cPanel WCM 3 V.1 dihapus, diganti
-      `GANTI_DENGAN_AKUN_CPANEL_BOLABOLABOLA`) — **BELUM diisi akun cPanel
-      asli bolabolabola.com**, operator perlu isi manual sebelum cPanel
-      Git Version Control bisa deploy sungguhan.
-- [ ] Akun cPanel & path docroot untuk bolabolabola.com — cPanel Git
-      Version Control sudah dikonfigurasi operator, tapi `.cpanel.yml`
-      di repo masih placeholder `DEPLOYPATH`. Perlu operator isi path
-      docroot asli lalu commit+push supaya deploy dari cPanel bisa
-      jalan.
+- [x] `.cpanel.yml` — `DEPLOYPATH` sudah diisi akun cPanel asli
+      bolabolabola.com (20 Agu 2026): `/home/bolabolabola/public_html/`.
+      Sebelumnya placeholder `GANTI_DENGAN_AKUN_CPANEL_BOLABOLABOLA`
+      (warisan akun cPanel WCM 3 V.1 sudah dihapus sesi sebelumnya).
+      Commit sudah di-push ke `origin/main` — tombol "Deploy HEAD Commit"
+      di cPanel Git Version Control seharusnya sudah bisa dipakai.
+- [ ] **Belum diverifikasi end-to-end**: apakah akun cPanel
+      `bolabolabola` beneran ada dan path `/home/bolabolabola/public_html/`
+      itu docroot yang benar untuk domain bolabolabola.com (operator yang
+      kasih info ini, belum dicek langsung dari sesi manapun). Kalau salah
+      akun/path, "Deploy HEAD Commit" akan gagal atau — lebih parah — sync
+      ke docroot yang salah. Operator perlu konfirmasi/coba deploy sekali
+      dan laporkan hasilnya.
 
 ### 7. SEO Dasar
 - [ ] Belum dikerjakan — robots.txt, sitemap, favicon.
@@ -235,11 +238,11 @@ sebenarnya.
 3. Detail struktur permalink final (saat ini masih pola warisan
    `/artikel/{slug}`, `/kategori/{slug}`).
 4. Akun Cloudflare — sama dengan WCM 2 V.2, atau baru?
-5. Akun cPanel & path docroot asli untuk bolabolabola.com — repo GitHub
-   sudah ada & cPanel Git Version Control sudah dikonfigurasi, tapi
-   `.cpanel.yml` di repo masih placeholder `DEPLOYPATH`
-   (`GANTI_DENGAN_AKUN_CPANEL_BOLABOLABOLA`). Perlu diisi akun/path asli
-   sebelum deploy dari cPanel bisa jalan.
+5. **Verifikasi akun cPanel `bolabolabola` & path
+   `/home/bolabolabola/public_html/`** — `DEPLOYPATH` di `.cpanel.yml`
+   sudah diisi sesuai info dari operator (20 Agu 2026), tapi belum
+   dicoba deploy sungguhan dari sesi manapun. Operator perlu coba
+   "Deploy HEAD Commit" sekali dan konfirmasi berhasil/tidak.
 6. Domain bolabolabola.com — sudah dibeli?
 7. Logo vector master (SVG/AI, belum di-recolor) — diminta ke operator
    kalau nanti butuh varian warna lain atau ukuran sangat besar tanpa
@@ -250,4 +253,6 @@ Bola/Basket/Voli/Bursa Transfer), mockup frontend v2 (sudah final,
 disetujui, dan sudah diimplementasikan ke PHP — lihat bagian 5 di atas),
 repo GitHub baru WCM 3 V.2 (`jalijali-dev/wcm-bolabolabola.com`, sudah
 dibuat operator dan sudah di-push initial commit bersih — lihat bagian 6
-di atas).
+di atas), `.cpanel.yml` DEPLOYPATH (sudah diisi
+`/home/bolabolabola/public_html/` — lihat bagian 6 di atas, tinggal
+diverifikasi deploy-nya beneran jalan atau tidak).

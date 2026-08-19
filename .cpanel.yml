@@ -2,12 +2,9 @@
 # Commit". Sinkronin isi repo ke document root, KECUALI file yang memang
 # TIDAK PERNAH boleh ikut git (config kredensial asli + folder upload).
 #
-# BELUM DIISI UNTUK WCM 3 V.2 — file ini masih warisan konfigurasi cPanel
-# punya WCM 3 V.1 (bolaupdateindonesia.com). DEPLOYPATH di bawah adalah
-# path production situs LAIN — JANGAN dipakai sampai operator kasih akun
-# cPanel & path docroot yang benar untuk bolabolabola.com. Lihat
-# docs/HANDOFF.md dan CLAUDE.md.
+# DEPLOYPATH untuk akun cPanel bolabolabola.com (WCM 3 V.2) — diisi 20 Agu
+# 2026 sesuai akun cPanel & path docroot yang operator sudah siapkan.
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/GANTI_DENGAN_AKUN_CPANEL_BOLABOLABOLA/public_html/
+    - export DEPLOYPATH=/home/bolabolabola/public_html/
     - /usr/bin/rsync -av --exclude='.git' --exclude='.cpanel.yml' --exclude='cms-admin/config/database.php' --exclude='cms-admin/config/app.php' --exclude='uploads' ./ $DEPLOYPATH
