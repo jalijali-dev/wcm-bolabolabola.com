@@ -162,6 +162,68 @@ sebenarnya.
       rusak akibat penghapusan section; `.util` dan `.social-section`
       sudah tidak ada di DOM manapun, logo mark border-radius 50% di
       kedua tempat.
+- [x] **Fitur baru: halaman player Live Streaming (`/live/...`), 9 Sep
+      2026** — additive, tidak mengganggu situs berita yang sudah ada.
+      Arsitektur cross-domain: listing pertandingan live TETAP di
+      `sagagoal.com/live` (operator, project terpisah); kartu match di
+      sana sekarang link ke `bolabolabola.com/live/{fixture_id}/{slug}`
+      (mode pertandingan asli) atau `bolabolabola.com/live/custom/{id}/
+      {slug}` (mode siaran manual). Situs ini (`wcm3_version2`) HANYA
+      merender halaman player-nya — **tidak ada database/admin panel
+      baru di sini**, semua data & pengelolaan live stream tetap 100% di
+      `sagagoal.com/cms-admin`.
+      - File baru: [`live.php`](../live.php) — fetch data 1 match
+        server-side (PHP cURL, bukan client-side JS — endpoint API
+        sengaja tanpa header CORS) dari `https://sagagoal.com/api/
+        live-match.php?id=...` atau `?custom_id=...`, lalu render pakai
+        `includes/site-header.php`/`site-footer.php` yang sama seperti
+        halaman lain (bukan template terpisah) — biar tetap satu
+        kesatuan visual dengan situs berita, bukan halaman asing.
+      - Routing baru di `.htaccess`: `^live/custom/([0-9]+)/([^/]+)/?$`
+        (WAJIB didefinisikan sebelum rule generik di bawahnya, kalau
+        tidak `custom` ke-parse jadi `{id}`) dan
+        `^live/([0-9]+)/([^/]+)/?$` — keduanya rewrite ke `live.php`.
+        `{slug}` murni kosmetik, tidak divalidasi/di-lookup.
+      - CSS baru (`.live-*` + `.wpm-empty-state`, ditambahkan di
+        `assets/css/site.css`, tidak mengubah rule lain) — dark card
+        (pakai `--dark`/`--red`/`--gold` yang sudah ada) buat badge LIVE
+        + skor tim + video wrapper aspect-ratio 16:9, senada dengan
+        estetika dark section yang sudah ada di mockup v2 (hero-banner,
+        footer), bukan tema baru yang gak nyambung.
+      - `embed_code` dari API di-echo LANGSUNG tanpa parsing ulang
+        (sudah disanitasi di sisi sagagoal.com per spek API — keputusan
+        eksplisit dari brief, bukan lubang keamanan yang kelewatan).
+        Field teks lain (`stream_title`, nama tim, `league_name`, dst)
+        tetap di-escape lewat `wpm_esc()` seperti biasa.
+      - Defensive terhadap semua kasus gagal: param `id`/`custom_id`
+        invalid, API balas 400/404/405/500, dan network timeout/host
+        gak reachable — semua jatuh ke satu empty-state
+        (`Siaran Tidak Ditemukan`) yang sama, bukan crash/500 putih.
+        Diverifikasi manual (lihat bawah).
+      - **Diverifikasi di browser (9 Sep 2026):** mode fixture asli
+        (`id=1635714`, "Real Madrid vs Inter", data live dari
+        `sagagoal.com/api/live-match.php` sungguhan) render lengkap
+        (badge, liga, judul, logo+skor tim, iframe Cloudflare Stream
+        ter-load); mode custom (`custom/1/...`) resolve ke `custom_id`
+        yang benar (dites lewat urutan rewrite rule); id tidak
+        ditemukan → empty-state; tanpa query param sama sekali →
+        empty-state (bukan crash); API unreachable (disimulasikan pakai
+        host palsu) → empty-state "Gagal menghubungi server streaming."
+        Responsive mobile (375px) dicek & DIPERBAIKI — `.live-page`
+        semula ke-overlap sama pola `.wrap`+`.main-layout` yang sudah
+        ada di codebase ini (`padding:Npx 0` pada class kedua
+        menghapus padding horizontal `.wrap`, isu pre-existing yang
+        juga ada di `.main-layout`/`.wpm-article` tapi di luar scope
+        fitur ini buat diperbaiki) — `.live-page` di-beri padding
+        horizontal eksplisit (`30px 20px 50px`) supaya halaman INI
+        gak kepotong di mobile, tanpa menyentuh halaman lain. Regression
+        check: homepage & kategori direload ulang setelah perubahan,
+        tampilan/data tidak berubah.
+      - **BELUM diverifikasi (di luar kemampuan sesi ini):** SSL
+        `https://bolabolabola.com` di production (baru bisa dicek
+        setelah deploy sungguhan), dan end-to-end click dari
+        `sagagoal.com/live` yang sungguhan menuju domain ini (perlu
+        dites lintas-project setelah kedua sisi live).
 
 ### 6. Deploy Workflow
 - [x] **Repo GitHub baru untuk WCM 3 V.2 sudah dibuat operator** —

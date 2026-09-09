@@ -19,3 +19,13 @@ RewriteRule ^artikel/([a-zA-Z0-9\-]+)/?$ artikel.php?slug=$1 [L,QSA]
 
 # /kategori/{slug} -> kategori.php?slug={slug}
 RewriteRule ^kategori/([a-zA-Z0-9\-]+)/?$ kategori.php?slug=$1 [L,QSA]
+
+# Live streaming player (additive feature, 9 Sep 2026) — match/stream data
+# fetched server-side from sagagoal.com's public API, no local DB. {slug}
+# is cosmetic only, not looked up. Custom-stream rule MUST come before the
+# generic /live/{id}/... rule below, or "custom" gets parsed as {id}.
+# /live/custom/{id}/{slug} -> live.php?custom_id={id}&slug={slug}
+RewriteRule ^live/custom/([0-9]+)/([^/]+)/?$ live.php?custom_id=$1&slug=$2 [L,QSA]
+
+# /live/{id}/{slug} -> live.php?id={id}&slug={slug}
+RewriteRule ^live/([0-9]+)/([^/]+)/?$ live.php?id=$1&slug=$2 [L,QSA]
