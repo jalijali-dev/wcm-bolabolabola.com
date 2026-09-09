@@ -113,7 +113,8 @@ $navCategories = wpm_site_nav_categories();
 
   <button type="button" class="wpm-mobilenav__item" id="wpmMobilenavMenuBtn" aria-haspopup="true" aria-expanded="false">
     <span class="wpm-mobilenav__icon">
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      <svg class="wpm-mobilenav__icon-bars" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      <svg class="wpm-mobilenav__icon-close" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
     </span>
     <span class="wpm-mobilenav__label">Menu</span>
   </button>
@@ -138,9 +139,9 @@ $navCategories = wpm_site_nav_categories();
   var panel = document.getElementById('wpmMobilemenuPanel');
   var backdrop = document.getElementById('wpmMobilemenuBackdrop');
   if (!btn || !panel || !backdrop) return;
-  function open(){ panel.hidden = false; btn.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
-  function close(){ panel.hidden = true; btn.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
-  btn.addEventListener('click', function(){ panel.hidden ? open() : close(); });
+  function open(){ panel.hidden = false; btn.setAttribute('aria-expanded','true'); btn.classList.add('is-open'); document.body.style.overflow='hidden'; }
+  function close(){ panel.hidden = true; btn.setAttribute('aria-expanded','false'); btn.classList.remove('is-open'); document.body.style.overflow=''; }
+  btn.addEventListener('click', function(e){ e.stopPropagation(); panel.hidden ? open() : close(); });
   backdrop.addEventListener('click', close);
 })();
 </script>
