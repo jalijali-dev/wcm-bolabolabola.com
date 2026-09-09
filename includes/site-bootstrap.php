@@ -162,6 +162,29 @@ function wpm_category_url(string $slug): string
     return wpm_base_url('/kategori/' . rawurlencode($slug));
 }
 
+/**
+ * True if the current request path matches $path (both compared with
+ * WPM_BASE_PATH stripped, so it works the same on production root and
+ * local subfolder dev). Pass $prefix = true to match any path that
+ * starts with $path — used for the mobile bottom nav's "Live" tab, since
+ * live pages are /live/{id}/{slug}, not a single fixed path.
+ */
+function wpm_is_active_path(string $path, bool $prefix = false): bool
+{
+    $current = (string) parse_url((string) ($_SERVER['REQUEST_URI'] ?? '/'), PHP_URL_PATH);
+    if (WPM_BASE_PATH !== '' && str_starts_with($current, WPM_BASE_PATH)) {
+        $current = substr($current, strlen(WPM_BASE_PATH));
+    }
+    $current = '/' . ltrim($current, '/');
+    $path = '/' . trim($path, '/');
+
+    if ($prefix) {
+        return $path === '/' ? $current === '/' : str_starts_with($current . '/', $path . '/');
+    }
+
+    return rtrim($current, '/') === rtrim($path, '/');
+}
+
 // ─── Data helpers ───────────────────────────────────────────────────────────
 
 /** Published articles, newest first, optionally filtered by category slug. */

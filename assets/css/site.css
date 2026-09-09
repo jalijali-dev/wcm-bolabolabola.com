@@ -209,3 +209,102 @@ img{max-width:100%;display:block;}
   .live-teams{flex-wrap:wrap;gap:16px;padding:18px;}
   .live-team__logo{width:44px;height:44px;}
 }
+
+/* ===== Mobile bottom nav (9 Sep 2026) — only shown <=768px; desktop
+   keeps using .hdr .nav untouched. Floating red/gold bar mirroring the
+   pattern already live on sagagoal.com, recolored to this site's own
+   palette (reuses --red/--red-dark/--gold/--dark, no new vars). ===== */
+.wpm-mobilenav{
+  display:none;
+}
+
+@media (max-width:768px){
+  body{ padding-bottom:76px; } /* keep footer/article content clear of the floating bar */
+
+  .wpm-mobilenav{
+    display:flex;
+    position:fixed;
+    left:12px; right:12px; bottom:12px;
+    z-index:200;
+    background:linear-gradient(135deg, var(--red) 0%, var(--red-dark) 100%);
+    border-radius:20px;
+    box-shadow:0 8px 24px rgba(0,0,0,.35), 0 0 0 1px rgba(255,255,255,.08) inset;
+    padding:6px 4px;
+    padding-bottom:calc(6px + env(safe-area-inset-bottom));
+  }
+
+  .wpm-mobilenav__item{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:2px;
+    padding:8px 2px;
+    border:none;
+    background:none;
+    color:rgba(255,255,255,.75);
+    font-family:var(--f-nav);
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:.02em;
+    text-decoration:none;
+    border-radius:14px;
+    transition:background .15s ease, color .15s ease;
+  }
+
+  .wpm-mobilenav__item.is-active{
+    background:rgba(255,255,255,.16);
+    color:#fff;
+  }
+
+  .wpm-mobilenav__icon{
+    position:relative;
+    display:flex;
+  }
+
+  .wpm-mobilenav__dot{
+    position:absolute;
+    top:-2px; right:-2px;
+    width:7px; height:7px;
+    border-radius:50%;
+    background:var(--gold);
+    box-shadow:0 0 0 2px var(--red);
+    animation:wpmMobilenavPulse 1.6s infinite;
+  }
+
+  @keyframes wpmMobilenavPulse{
+    0%{ transform:scale(1); opacity:1; }
+    70%{ transform:scale(1.6); opacity:0; }
+    100%{ transform:scale(1.6); opacity:0; }
+  }
+
+  .wpm-mobilenav__item--live .wpm-mobilenav__label{ color:#ffe9a8; }
+
+  /* Overflow menu bottom-sheet */
+  .wpm-mobilemenu{ position:fixed; inset:0; z-index:210; }
+  .wpm-mobilemenu[hidden]{ display:none; }
+  .wpm-mobilemenu__backdrop{ position:absolute; inset:0; background:rgba(0,0,0,.5); }
+  .wpm-mobilemenu__sheet{
+    position:absolute; left:0; right:0; bottom:0;
+    background:var(--dark);
+    border-radius:20px 20px 0 0;
+    padding:12px 20px calc(20px + env(safe-area-inset-bottom));
+    box-shadow:0 -8px 24px rgba(0,0,0,.4);
+  }
+  .wpm-mobilemenu__handle{
+    width:40px; height:4px; border-radius:2px;
+    background:rgba(255,255,255,.25);
+    margin:4px auto 14px;
+  }
+  .wpm-mobilemenu__link{
+    display:block;
+    padding:14px 4px;
+    color:#fff;
+    text-decoration:none;
+    font-family:var(--f-nav);
+    font-weight:700;
+    border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  .wpm-mobilemenu__link:last-child{ border-bottom:none; }
+}
