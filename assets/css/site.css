@@ -198,6 +198,8 @@ img{max-width:100%;display:block;}
   .main-layout{grid-template-columns:1fr;}
   .wpm-article{grid-template-columns:1fr;}
   .news-card{grid-template-columns:80px 1fr;}
+  .news-thumb{width:80px;height:80px;} /* column shrank from 110px->80px above; thumb has its own fixed size and wasn't following, so it overflowed into the title column */
+  .news-body{min-width:0;} /* grid item min-width defaults to content size, not the track — long titles could still push the column wider without this */
   .news-cta{grid-column:1 / -1;justify-self:start;}
   .footer-grid{grid-template-columns:repeat(2,1fr);}
   .hero-banner-title h1{font-size:38px;}
@@ -220,6 +222,10 @@ img{max-width:100%;display:block;}
 
 @media (max-width:768px){
   body{ padding-bottom:76px; } /* keep footer/article content clear of the floating bar */
+
+  /* Header menu is redundant with the bottom nav at this width — hide
+     just the <nav>, .brand (logo/wordmark) stays visible up top. */
+  .hdr .nav{ display:none; }
 
   .wpm-mobilenav{
     display:flex;
