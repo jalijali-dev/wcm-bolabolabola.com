@@ -231,6 +231,13 @@ img{max-width:100%;display:block;}
      just the <nav>, .brand (logo/wordmark) stays visible up top. */
   .hdr .nav{ display:none; }
 
+  /* Title + tagline were rendering inline (2 spans, default inline flow)
+     and wrapping awkwardly next to each other at narrow widths — stack
+     tagline under the title instead. */
+  .brand__text{ display:flex; flex-direction:column; align-items:flex-start; }
+  .brand__title{ font-size:18px; white-space:nowrap; }
+  .brand__sub{ display:block; width:100%; margin-top:2px; font-size:10px; letter-spacing:2px; white-space:normal; }
+
   .wpm-mobilenav{
     display:flex;
     position:fixed;
