@@ -258,6 +258,14 @@ img{max-width:100%;display:block;}
 @media (max-width:768px){
   body{ padding-bottom:88px; } /* keep footer/article content clear of the bottom nav bar, which now sits flush with 0 outer margin */
 
+  /* Search takes the full subbar row on mobile; breadcrumb ("Beranda")
+     is redundant with the bottom nav's Home tab, so hide it here. */
+  .subbar .breadcrumb{ display:none; }
+  .subbar .wrap{ gap:0; }
+  .cta-row{ width:100%; }
+  .wpm-search{ width:100%; }
+  .wpm-search input{ width:100%; }
+
   /* extra breathing room so the copyright/social row doesn't sit flush
      against the floating bar's clearance zone */
   .footer-bottom{ margin-bottom:8px; }
