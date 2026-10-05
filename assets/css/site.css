@@ -64,8 +64,15 @@ img{max-width:100%;display:block;}
 .cta-row{display:flex;gap:10px;}
 .cta{display:flex;align-items:center;gap:6px;background:var(--gold);color:var(--dark);font-family:var(--f-nav);font-weight:700;font-size:12.5px;padding:8px 14px;border-radius:5px;letter-spacing:.3px;}
 .cta.outline{background:transparent;border:1.5px solid var(--red);color:var(--red-dark);}
-.wpm-search{display:flex;align-items:center;gap:8px;}
-.wpm-search input{border:1.5px solid var(--red);border-radius:5px;padding:7px 10px;font-size:13px;font-family:var(--f-body);width:160px;color:var(--ink);outline:none;}
+.wpm-search{display:flex;align-items:center;gap:8px;position:relative;}
+.wpm-search input{border:1.5px solid var(--red);border-radius:5px;padding:7px 36px 7px 10px;font-size:13px;font-family:var(--f-body);width:160px;color:var(--ink);outline:none;}
+.wpm-search__btn{position:absolute;right:6px;top:50%;transform:translateY(-50%);display:flex;align-items:center;justify-content:center;width:24px;height:24px;border:none;background:none;color:var(--red);cursor:pointer;padding:0;border-radius:4px;transition:color .15s ease,background .15s ease;}
+.wpm-search__btn:hover,.wpm-search__btn:focus-visible{color:#fff;background:var(--red);}
+
+@media (max-width: 768px){
+  .wpm-search{width:100%;}
+  .wpm-search input{width:100%;}
+}
 
 /* ── Hero banner ── */
 .hero-banner{position:relative;height:260px;background:linear-gradient(120deg,#3a1013,#15181f 60%,#1c2029);overflow:hidden;}

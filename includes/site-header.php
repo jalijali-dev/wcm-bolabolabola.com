@@ -63,6 +63,9 @@ $navCategories = wpm_site_nav_categories();
     <div class="cta-row">
       <form class="wpm-search" action="<?= wpm_esc(wpm_base_url('/cari.php')) ?>" method="get" role="search">
         <input type="text" name="q" placeholder="Cari berita bola&hellip;" aria-label="Cari berita">
+        <button type="submit" class="wpm-search__btn" aria-label="Cari">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        </button>
       </form>
     </div>
   </div>
