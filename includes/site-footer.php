@@ -41,22 +41,11 @@ $navCategories = wpm_site_nav_categories();
         <a href="<?= wpm_esc(wpm_base_url('/')) ?>">Kebijakan Privasi</a>
         <a href="<?= wpm_esc(wpm_base_url('/')) ?>">Ketentuan Layanan</a>
       </div>
-      <div>
-        <h5>Ikuti Kami</h5>
-        <a href="<?= wpm_esc(wpm_base_url('/')) ?>">Instagram</a>
-        <a href="<?= wpm_esc(wpm_base_url('/')) ?>">Twitter / X</a>
-        <a href="<?= wpm_esc(wpm_base_url('/')) ?>">YouTube</a>
-      </div>
     </div>
   </div>
 
   <div class="footer-bottom">
     <div class="copy">&copy; <?= date('Y') ?> <?= wpm_esc(WPM_SITE_NAME) ?> (bolabolabola.com). Seluruh hak cipta dilindungi.</div>
-    <div class="socials">
-      <a href="#" aria-label="Instagram">IG</a>
-      <a href="#" aria-label="Twitter">X</a>
-      <a href="#" aria-label="YouTube">YT</a>
-    </div>
   </div>
 </footer>
 
