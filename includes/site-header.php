@@ -97,13 +97,35 @@ $navCategories = wpm_site_nav_categories();
       $bnMain    = $bnDesktop !== '' ? $bnDesktop : $bnMobile;   // desktop first, mobile as fallback
       $bnUrl     = trim((string) $bn['button_url']);
   ?>
+  <?php $bnButtonText = trim((string) ($bn['button_text'] ?? '')); ?>
   <a href="<?= wpm_esc($bnUrl !== '' ? $bnUrl : '#') ?>" class="hero-promo__slide<?= $bnIdx === 0 ? ' is-active' : '' ?>">
     <picture>
       <?php if ($bnMobile !== '' && $bnDesktop !== ''): ?><source media="(max-width:768px)" srcset="<?= wpm_esc(wpm_image_url($bnMobile)) ?>"><?php endif; ?>
       <img src="<?= wpm_esc(wpm_image_url($bnMain)) ?>" alt="<?= wpm_esc((string) $bn['title']) ?>" class="hero-promo__img" <?= $bnIdx === 0 ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"' ?> decoding="async">
     </picture>
+    <?php if ($bnButtonText !== ''): ?>
+    <span class="hero-promo__cta" data-hero-cta><?= wpm_esc($bnButtonText) ?></span>
+    <?php endif; ?>
   </a>
   <?php endforeach; ?>
+  <script>
+  (function () {
+    // Auto show/hide CTA pill every ~1 min so it grabs attention without
+    // sitting permanently in the way of the banner artwork underneath.
+    var ctas = document.querySelectorAll('#hero-promo [data-hero-cta]');
+    if (ctas.length) {
+      var SHOW_MS = 6000, CYCLE_MS = 60000;
+      var toggle = function () {
+        ctas.forEach(function (el) { el.classList.add('is-visible'); });
+        setTimeout(function () {
+          ctas.forEach(function (el) { el.classList.remove('is-visible'); });
+        }, SHOW_MS);
+      };
+      setTimeout(toggle, 2000);
+      setInterval(toggle, CYCLE_MS);
+    }
+  })();
+  </script>
   <?php if ($bnMulti): ?>
   <div class="hero-promo__nav">
     <button type="button" class="hero-promo__btn" data-dir="-1" aria-label="Banner sebelumnya">&lsaquo;</button>
