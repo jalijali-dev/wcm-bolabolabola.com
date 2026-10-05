@@ -78,9 +78,14 @@ $navCategories = wpm_site_nav_categories();
 <?php if (!empty($heroBanners)):
     $bnMulti = count($heroBanners) > 1;
     $bnPresetMap = [
-        '400' => ['min' => '128px', 'vw' => '12.8vw', 'max' => '256px', 'ratio' => '2.9167'],
-        '500' => ['min' => '160px', 'vw' => '16vw',   'max' => '320px', 'ratio' => '2.3333'],
-        '700' => ['min' => '224px', 'vw' => '22.4vw', 'max' => '448px', 'ratio' => '1.6667'],
+        '400'  => ['min' => '128px', 'vw' => '12.8vw', 'max' => '256px', 'ratio' => '2.9167'],
+        '500'  => ['min' => '160px', 'vw' => '16vw',   'max' => '320px', 'ratio' => '2.3333'],
+        '700'  => ['min' => '224px', 'vw' => '22.4vw', 'max' => '448px', 'ratio' => '1.6667'],
+        '800'  => ['min' => '256px', 'vw' => '25.6vw', 'max' => '512px', 'ratio' => '1.4583'],
+        '900'  => ['min' => '288px', 'vw' => '28.8vw', 'max' => '576px', 'ratio' => '1.2963'],
+        '1000' => ['min' => '320px', 'vw' => '32vw',   'max' => '640px', 'ratio' => '1.1667'],
+        '1200' => ['min' => '384px', 'vw' => '38.4vw', 'max' => '768px', 'ratio' => '0.9722'],
+        '1400' => ['min' => '448px', 'vw' => '44.8vw', 'max' => '896px', 'ratio' => '0.8333'],
     ];
     $bnPresetKey = (string) ($heroBanners[0]['height_preset'] ?? '500');
     $bnPreset = $bnPresetMap[$bnPresetKey] ?? $bnPresetMap['500'];

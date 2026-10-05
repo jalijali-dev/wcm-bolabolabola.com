@@ -291,6 +291,11 @@ require dirname(__DIR__) . '/includes/alerts.php';
                         <option value="400"<?= $heightPresetValue === '400' ? ' selected' : '' ?>>1920 × 400 — pendek</option>
                         <option value="500"<?= $heightPresetValue === '500' ? ' selected' : '' ?>>1920 × 500 — sedang (default)</option>
                         <option value="700"<?= $heightPresetValue === '700' ? ' selected' : '' ?>>1920 × 700 — tinggi</option>
+                        <option value="800"<?= $heightPresetValue === '800' ? ' selected' : '' ?>>1920 × 800</option>
+                        <option value="900"<?= $heightPresetValue === '900' ? ' selected' : '' ?>>1920 × 900</option>
+                        <option value="1000"<?= $heightPresetValue === '1000' ? ' selected' : '' ?>>1920 × 1000</option>
+                        <option value="1200"<?= $heightPresetValue === '1200' ? ' selected' : '' ?>>1920 × 1200 — sangat tinggi</option>
+                        <option value="1400"<?= $heightPresetValue === '1400' ? ' selected' : '' ?>>1920 × 1400 — sangat tinggi</option>
                     </select>
                 </label>
                 <label class="field">Sort order

@@ -26,7 +26,7 @@ $buttonText = trim((string) ($_POST['button_text'] ?? ''));
 $buttonUrl = trim((string) ($_POST['button_url'] ?? ''));
 $placement = trim((string) ($_POST['placement'] ?? ''));
 $heightPreset = trim((string) ($_POST['height_preset'] ?? '500'));
-if (!in_array($heightPreset, ['400', '500', '700'], true)) {
+if (!in_array($heightPreset, ['400', '500', '700', '800', '900', '1000', '1200', '1400'], true)) {
     $heightPreset = '500';
 }
 $sortOrderRaw = trim((string) ($_POST['sort_order'] ?? '0'));
