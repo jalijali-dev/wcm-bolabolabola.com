@@ -301,7 +301,7 @@ require dirname(__DIR__) . '/includes/alerts.php';
                 ?>
                 <label class="field">Ukuran banner (desktop)
                     <select name="height_preset" required>
-                        <?php foreach ($heightPresetOptions as $hpValue => $hpLabel): ?>
+                        <?php foreach ($heightPresetOptions as $hpValue => $hpLabel): $hpValue = (string) $hpValue; ?>
                         <option value="<?= cms_esc($hpValue) ?>"<?= $heightPresetValue === $hpValue ? ' selected' : '' ?>><?= cms_esc($hpLabel) ?></option>
                         <?php endforeach; ?>
                     </select>
