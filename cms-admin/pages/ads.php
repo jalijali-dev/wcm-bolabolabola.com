@@ -1085,6 +1085,7 @@ require dirname(__DIR__) . '/includes/alerts.php';
     var _targetInput = null;
     function openPicker(input) {
         _targetInput = input;
+        modal.dataset.current = input.value || '';   // lets the modal mark the current image as selected
         if (search) { search.value = ''; search.dispatchEvent(new Event('input')); search.focus(); }
         modal.hidden = false;
     }

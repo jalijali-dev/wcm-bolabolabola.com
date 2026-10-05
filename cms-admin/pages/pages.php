@@ -1671,6 +1671,8 @@ require dirname(__DIR__) . '/includes/alerts.php';
 
     function openPicker(input) {
         _targetInput = input;
+        // Lets the modal mark the field's current image as selected.
+        modal.dataset.current = input.value || '';
         // Reset search so all images are visible (mirrors tinymce-media-picker openModal)
         if (search) {
             search.value = '';
