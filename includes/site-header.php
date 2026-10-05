@@ -100,7 +100,7 @@ $navCategories = wpm_site_nav_categories();
   <a href="<?= wpm_esc($bnUrl !== '' ? $bnUrl : '#') ?>" class="hero-promo__slide<?= $bnIdx === 0 ? ' is-active' : '' ?>">
     <picture>
       <?php if ($bnMobile !== '' && $bnDesktop !== ''): ?><source media="(max-width:768px)" srcset="<?= wpm_esc(wpm_image_url($bnMobile)) ?>"><?php endif; ?>
-      <img src="<?= wpm_esc(wpm_image_url($bnMain)) ?>" alt="<?= wpm_esc((string) $bn['title']) ?>" class="hero-promo__img">
+      <img src="<?= wpm_esc(wpm_image_url($bnMain)) ?>" alt="<?= wpm_esc((string) $bn['title']) ?>" class="hero-promo__img" <?= $bnIdx === 0 ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"' ?> decoding="async">
     </picture>
   </a>
   <?php endforeach; ?>

@@ -29,3 +29,35 @@ RewriteRule ^live/custom/([0-9]+)/([^/]+)/?$ live.php?custom_id=$1&slug=$2 [L,QS
 
 # /live/{id}/{slug} -> live.php?id={id}&slug={slug}
 RewriteRule ^live/([0-9]+)/([^/]+)/?$ live.php?id=$1&slug=$2 [L,QSA]
+
+# ===== Browser caching for static assets (images/css/js/fonts) =====
+# Lets repeat visits reuse already-downloaded files from the browser's own
+# cache instead of re-downloading on every reload — big win for image-heavy
+# pages like the homepage hero banner + news thumbnails. Safe no-op if the
+# module isn't enabled on this host (wrapped in <IfModule>).
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/gif "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType image/x-icon "access plus 1 year"
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 month"
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType font/woff "access plus 1 year"
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(jpe?g|png|webp|gif|svg|ico)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.(css|js|woff2?)$">
+    Header set Cache-Control "public, max-age=2592000"
+  </FilesMatch>
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml application/javascript application/json image/svg+xml
+</IfModule>

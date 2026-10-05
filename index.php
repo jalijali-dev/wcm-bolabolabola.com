@@ -11,6 +11,8 @@ $highlightRows = wpm_get_articles($pdo, 4, 8, null);
 $pageTitle = WPM_SITE_NAME . ' — ' . WPM_SITE_TAGLINE;
 $metaDescription = 'Berita bola dan update olahraga terkini di ' . WPM_SITE_NAME . ': Sepak Bola, Basket, Voli, dan Bursa Transfer.';
 $activeNavSlug = 'home';
+$adScope = 'homepage';
+$adTargetId = null;
 // Active "home_hero" banners (cms-admin → Banners) replace the big hero block.
 // Rows without any image are skipped; more than one becomes a slider.
 $heroBanners = array_values(array_filter(
@@ -22,15 +24,18 @@ $heroSubtitle = 'Berita bola & olahraga terkini — diperbarui setiap hari';
 require __DIR__ . '/includes/site-header.php';
 ?>
 
+<?php $adHomeHero = wpm_ad_row($pdo, 'homepage-hero', 'homepage'); ?>
+<?php if ($adHomeHero !== ''): ?><div class="wrap" style="padding-top:20px"><?= $adHomeHero ?></div><?php endif; ?>
+
 <main class="wrap main-layout">
   <div>
 
     <div class="section-head"><span class="bar"></span><h2>Berita Terbaru</h2></div>
     <div class="news-list">
-      <?php foreach ($latestRows as $item): ?>
+      <?php foreach ($latestRows as $cardNo => $item): ?>
       <div class="news-card">
         <a href="<?= wpm_esc(wpm_article_url($item['slug'])) ?>" class="news-thumb wpm-photo">
-          <img src="<?= wpm_esc(wpm_image_url($item['featured_image'])) ?>" alt="<?= wpm_esc($item['title']) ?>">
+          <img src="<?= wpm_esc(wpm_image_url($item['featured_image'])) ?>" alt="<?= wpm_esc($item['title']) ?>" loading="lazy" decoding="async">
         </a>
         <div class="news-body">
           <h3><a href="<?= wpm_esc(wpm_article_url($item['slug'])) ?>"><?= wpm_esc($item['title']) ?></a></h3>
@@ -41,6 +46,7 @@ require __DIR__ . '/includes/site-header.php';
         </div>
         <a href="<?= wpm_esc(wpm_article_url($item['slug'])) ?>" class="news-cta">Baca</a>
       </div>
+      <?php if ($cardNo === 3) { echo wpm_ad_row($pdo, 'between-article-cards', 'homepage'); } ?>
       <?php endforeach; ?>
       <?php if (!$latestRows): ?>
       <p class="sidebar-empty">Belum ada artikel. Artikel yang dipublikasikan di kategori Sepak Bola, Basket, Voli, atau Bursa Transfer akan tampil di sini.</p>
@@ -53,7 +59,7 @@ require __DIR__ . '/includes/site-header.php';
       <?php foreach ($highlightRows as $item): ?>
       <div class="news-card">
         <a href="<?= wpm_esc(wpm_article_url($item['slug'])) ?>" class="news-thumb wpm-photo">
-          <img src="<?= wpm_esc(wpm_image_url($item['featured_image'])) ?>" alt="<?= wpm_esc($item['title']) ?>">
+          <img src="<?= wpm_esc(wpm_image_url($item['featured_image'])) ?>" alt="<?= wpm_esc($item['title']) ?>" loading="lazy" decoding="async">
         </a>
         <div class="news-body">
           <h3><a href="<?= wpm_esc(wpm_article_url($item['slug'])) ?>"><?= wpm_esc($item['title']) ?></a></h3>
@@ -80,6 +86,7 @@ require __DIR__ . '/includes/site-header.php';
         <?php endforeach; ?>
       </div>
     </div>
+    <?= wpm_ad_row($pdo, 'homepage-before-popular', 'homepage') ?>
     <div class="sidebar-box">
       <h3>Terpopuler</h3>
       <div class="bar"></div>
