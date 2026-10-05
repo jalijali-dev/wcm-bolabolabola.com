@@ -166,17 +166,6 @@ function cms_nav_href(string $pageFilename): string
     return cms_is_pages_subdirectory() ? $pageFilename : 'pages/' . $pageFilename;
 }
 
-/**
- * Prefix needed to reach cms-admin/pages/*.php from the current script.
- * Used client-side (global search) to turn a bare filename returned by
- * actions/search.php into a link that resolves correctly no matter which
- * admin page the search was triggered from.
- */
-function cms_pages_prefix(): string
-{
-    return cms_is_pages_subdirectory() ? '' : 'pages/';
-}
-
 function cms_dashboard_href(): string
 {
     return cms_is_pages_subdirectory() ? '../dashboard.php' : 'dashboard.php';
@@ -226,7 +215,10 @@ function cms_current_theme(): string
 {
     cms_session_start();
     $theme = (string) ($_SESSION['wpm_theme'] ?? '');
-    return in_array($theme, cms_valid_themes(), true) ? $theme : 'deep-purple';
+    // Default for admins with no saved choice yet: Light (changed from
+    // Deep Purple, Okt 2026). Anyone who already picked a theme keeps it —
+    // this is only the fallback when the session has no valid value.
+    return in_array($theme, cms_valid_themes(), true) ? $theme : 'light-modern';
 }
 
 function cms_settings_href(): string

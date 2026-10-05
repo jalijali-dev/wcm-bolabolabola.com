@@ -22,14 +22,30 @@ $cmsGrowthNotif = (isset($pdo) && $pdo instanceof PDO)
             <h1 class="admin-navbar__title"><?= cms_esc($pageTitle) ?></h1>
         </div>
         <div class="admin-navbar__center">
-            <label class="admin-search" data-pages-prefix="<?= cms_esc(cms_pages_prefix()) ?>">
-                <span class="visually-hidden">Search</span>
+            <?php
+            // Sidebar-menu search: client-side filter over the SAME role-
+            // filtered $sidebarSections that sidebar.php just rendered
+            // (header → sidebar → navbar are all required at page scope, so
+            // it's in scope here). Embedding it means no request per
+            // keystroke, and an admin never sees a menu they can't open.
+            $cmsMenuSearchIndex = [];
+            foreach (($sidebarSections ?? []) as $menuSection) {
+                if ($menuSection['type'] === 'link') {
+                    $cmsMenuSearchIndex[] = ['label' => $menuSection['label'], 'group' => '', 'href' => $menuSection['href']];
+                    continue;
+                }
+                foreach ($menuSection['items'] as $menuItem) {
+                    $cmsMenuSearchIndex[] = ['label' => $menuItem['label'], 'group' => $menuSection['label'], 'href' => $menuItem['href']];
+                }
+            }
+            ?>
+            <label class="admin-search" data-menu-index="<?= cms_esc((string) json_encode($cmsMenuSearchIndex, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) ?>">
+                <span class="visually-hidden">Cari menu</span>
                 <input type="search"
                        id="admin-search-input"
                        class="admin-search__input"
-                       placeholder="Search pages, articles, messages…"
-                       autocomplete="off"
-                       data-search-action="<?= cms_esc(cms_action_href('search.php')) ?>">
+                       placeholder="Cari menu… (mis. banner, seo, media)"
+                       autocomplete="off">
                 <div class="admin-search__results" id="admin-search-results" hidden></div>
             </label>
         </div>

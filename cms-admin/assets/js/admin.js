@@ -85,7 +85,7 @@
    ============================================================ */
 (function () {
   var THEME_KEY    = "wpm-theme";
-  var DEFAULT      = "deep-purple";
+  var DEFAULT      = "light-modern";
   var VALID_THEMES = ["dark-modern", "light-modern", "deep-purple"];
   var html         = document.documentElement;
 
@@ -136,10 +136,13 @@
 }());
 
 /* ============================================================
-   Global search (navbar)
-   Debounced AJAX call to actions/search.php, renders a grouped
-   dropdown of results (Pages & Articles, Contact Messages) under
-   the search box.
+   Sidebar-menu search (navbar)
+   Pure client-side filter — no request per keystroke. The menu list
+   (already filtered to what this admin's role may open) is embedded by
+   includes/navbar.php in data-menu-index as [{label, group, href}, …].
+   Typing "banner", "seo", "media"… lists the matching sidebar entries
+   instantly; Enter opens the first match, ArrowDown/Up moves between
+   results.
    ============================================================ */
 (function () {
   var input = document.getElementById("admin-search-input");
@@ -147,10 +150,17 @@
   if (!input || !resultsBox) { return; }
 
   var wrapper = input.closest(".admin-search");
-  var pagesPrefix = (wrapper && wrapper.dataset.pagesPrefix) || "";
-  var searchAction = input.dataset.searchAction;
-  var debounceTimer = null;
-  var activeController = null;
+  var menuItems = [];
+  try {
+    menuItems = JSON.parse((wrapper && wrapper.dataset.menuIndex) || "[]");
+  } catch (e) {
+    menuItems = [];
+  }
+  menuItems.forEach(function (item, i) {
+    item._order = i;
+    item._label = String(item.label || "").toLowerCase();
+    item._hay = (item._label + " " + String(item.group || "").toLowerCase());
+  });
 
   function escapeHtml(str) {
     return String(str).replace(/[&<>"']/g, function (c) {
@@ -163,72 +173,55 @@
     resultsBox.innerHTML = "";
   }
 
+  /* Every whitespace-separated term must appear in "label + group";
+     entries whose own label matches the whole query rank first, rest
+     keep sidebar order. */
+  function filterMenu(query) {
+    var q = query.toLowerCase();
+    var terms = q.split(/\s+/).filter(Boolean);
+    return menuItems
+      .filter(function (item) {
+        return terms.every(function (t) { return item._hay.indexOf(t) !== -1; });
+      })
+      .sort(function (a, b) {
+        var ra = a._label.indexOf(q) !== -1 ? 0 : 1;
+        var rb = b._label.indexOf(q) !== -1 ? 0 : 1;
+        return ra - rb || a._order - b._order;
+      });
+  }
+
   function renderResults(items, query) {
     if (!items.length) {
       resultsBox.innerHTML =
-        '<div class="admin-search__empty">No results for “' + escapeHtml(query) + '”.</div>';
+        '<div class="admin-search__empty">Menu “' + escapeHtml(query) + '” tidak ditemukan.</div>';
       resultsBox.removeAttribute("hidden");
       return;
     }
-
-    var groups = {};
-    var order = [];
-    items.forEach(function (item) {
-      if (!groups[item.type]) {
-        groups[item.type] = [];
-        order.push(item.type);
-      }
-      groups[item.type].push(item);
-    });
-
     var html = "";
-    order.forEach(function (type) {
-      html += '<div class="admin-search__group-label">' + escapeHtml(type) + "</div>";
-      groups[type].forEach(function (item) {
-        var href = pagesPrefix + item.url;
-        html +=
-          '<a class="admin-search__item" href="' + escapeHtml(href) + '">' +
-          '<span class="admin-search__item-title">' + escapeHtml(item.title || "(untitled)") + "</span>" +
-          '<span class="admin-search__item-subtitle">' + escapeHtml(item.subtitle || "") + "</span>" +
-          "</a>";
-      });
+    items.forEach(function (item) {
+      html +=
+        '<a class="admin-search__item" href="' + escapeHtml(item.href) + '">' +
+        '<span class="admin-search__item-title">' + escapeHtml(item.label || "(untitled)") + "</span>" +
+        '<span class="admin-search__item-subtitle">' + escapeHtml(item.group || "Menu utama") + "</span>" +
+        "</a>";
     });
-
     resultsBox.innerHTML = html;
     resultsBox.removeAttribute("hidden");
   }
 
-  function runSearch(query) {
-    if (!searchAction) { return; }
-    if (activeController) { activeController.abort(); }
-    activeController = new AbortController();
-
-    fetch(searchAction + "?q=" + encodeURIComponent(query), {
-      credentials: "same-origin",
-      signal: activeController.signal
-    })
-      .then(function (res) { return res.json(); })
-      .then(function (data) {
-        if (!data || !data.ok) { return; }
-        renderResults(data.results || [], query);
-      })
-      .catch(function () { /* aborted or network hiccup: ignore */ });
-  }
-
-  input.addEventListener("input", function () {
+  function update() {
     var query = input.value.trim();
-    window.clearTimeout(debounceTimer);
-    if (query.length < 2) {
+    if (!query) {
       hideResults();
       return;
     }
-    debounceTimer = window.setTimeout(function () { runSearch(query); }, 250);
-  });
+    renderResults(filterMenu(query), query);
+  }
+
+  input.addEventListener("input", update);
 
   input.addEventListener("focus", function () {
-    if (input.value.trim().length >= 2 && resultsBox.innerHTML) {
-      resultsBox.removeAttribute("hidden");
-    }
+    if (input.value.trim()) { update(); }
   });
 
   document.addEventListener("click", function (e) {
@@ -238,9 +231,32 @@
   });
 
   input.addEventListener("keydown", function (e) {
+    var links = resultsBox.querySelectorAll(".admin-search__item");
     if (e.key === "Escape") {
       hideResults();
       input.blur();
+    } else if (e.key === "Enter" && links.length) {
+      e.preventDefault();
+      window.location.href = links[0].getAttribute("href");
+    } else if (e.key === "ArrowDown" && links.length) {
+      e.preventDefault();
+      links[0].focus();
+    }
+  });
+
+  resultsBox.addEventListener("keydown", function (e) {
+    var links = Array.prototype.slice.call(resultsBox.querySelectorAll(".admin-search__item"));
+    var idx = links.indexOf(document.activeElement);
+    if (idx === -1) { return; }
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      if (links[idx + 1]) { links[idx + 1].focus(); }
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      if (idx === 0) { input.focus(); } else { links[idx - 1].focus(); }
+    } else if (e.key === "Escape") {
+      hideResults();
+      input.focus();
     }
   });
 }());
