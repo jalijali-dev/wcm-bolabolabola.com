@@ -285,18 +285,33 @@ require dirname(__DIR__) . '/includes/alerts.php';
                 <label class="field">Placement
                     <input type="text" name="placement" value="<?= cms_esc($editRow ? $val($editRow, 'placement') : '') ?>" required placeholder="e.g. home_hero">
                 </label>
-                <?php $heightPresetValue = $editRow ? $val($editRow, 'height_preset') : '500'; if ($heightPresetValue === '') { $heightPresetValue = '500'; } ?>
+                <?php
+                $heightPresetValue = $editRow ? $val($editRow, 'height_preset') : '500';
+                if ($heightPresetValue === '') { $heightPresetValue = '500'; }
+                $heightPresetOptions = [
+                    '400'  => '1920 × 400 — pendek (strip tipis, teks besar di tengah gambar)',
+                    '500'  => '1920 × 500 — sedang, default (pas untuk sebagian besar banner landscape)',
+                    '700'  => '1920 × 700 — tinggi (cocok untuk gambar rasio ~16:9, 1672×941 dst.)',
+                    '800'  => '1920 × 800 — tinggi+ (gambar makin sedikit ke-crop atas/bawah)',
+                    '900'  => '1920 × 900 — ekstra tinggi',
+                    '1000' => '1920 × 1000 — ekstra tinggi (mendekati persegi)',
+                    '1200' => '1920 × 1200 — sangat tinggi (makan banyak tempat di layar)',
+                    '1400' => '1920 × 1400 — paling tinggi (hampir penuh 1 layar desktop, pakai hati-hati)',
+                ];
+                ?>
                 <label class="field">Ukuran banner (desktop)
                     <select name="height_preset" required>
-                        <option value="400"<?= $heightPresetValue === '400' ? ' selected' : '' ?>>1920 × 400 — pendek</option>
-                        <option value="500"<?= $heightPresetValue === '500' ? ' selected' : '' ?>>1920 × 500 — sedang (default)</option>
-                        <option value="700"<?= $heightPresetValue === '700' ? ' selected' : '' ?>>1920 × 700 — tinggi</option>
-                        <option value="800"<?= $heightPresetValue === '800' ? ' selected' : '' ?>>1920 × 800</option>
-                        <option value="900"<?= $heightPresetValue === '900' ? ' selected' : '' ?>>1920 × 900</option>
-                        <option value="1000"<?= $heightPresetValue === '1000' ? ' selected' : '' ?>>1920 × 1000</option>
-                        <option value="1200"<?= $heightPresetValue === '1200' ? ' selected' : '' ?>>1920 × 1200 — sangat tinggi</option>
-                        <option value="1400"<?= $heightPresetValue === '1400' ? ' selected' : '' ?>>1920 × 1400 — sangat tinggi</option>
+                        <?php foreach ($heightPresetOptions as $hpValue => $hpLabel): ?>
+                        <option value="<?= cms_esc($hpValue) ?>"<?= $heightPresetValue === $hpValue ? ' selected' : '' ?>><?= cms_esc($hpLabel) ?></option>
+                        <?php endforeach; ?>
                     </select>
+                    <span class="cms-field-hint" role="note">
+                        Angka kedua = tinggi tampilan di layar desktop lebar (1920px). Makin besar angkanya,
+                        makin tinggi banner dan makin sedikit bagian gambar yang ke-crop — tapi makin banyak
+                        makan tempat sebelum konten berita. Kalau gambar kamu rasio ~16:9 (lebar:tinggi ≈ 1.78:1),
+                        <strong>700–800</strong> biasanya paling pas. Pilihan yang sekarang tersimpan:
+                        <strong><?= cms_esc($heightPresetValue) ?></strong>.
+                    </span>
                 </label>
                 <label class="field">Sort order
                     <input type="number" name="sort_order" min="0" step="1" value="<?= cms_esc($editRow ? $val($editRow, 'sort_order') : '0') ?>" required>
