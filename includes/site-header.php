@@ -114,7 +114,7 @@ $navCategories = wpm_site_nav_categories();
     // sitting permanently in the way of the banner artwork underneath.
     var ctas = document.querySelectorAll('#hero-promo [data-hero-cta]');
     if (ctas.length) {
-      var SHOW_MS = 6000, CYCLE_MS = 60000;
+      var SHOW_MS = 8000, CYCLE_MS = 30000;
       var toggle = function () {
         ctas.forEach(function (el) { el.classList.add('is-visible'); });
         setTimeout(function () {

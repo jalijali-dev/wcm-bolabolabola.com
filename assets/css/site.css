@@ -105,25 +105,25 @@ img{max-width:100%;display:block;}
   position:absolute;
   left:50%;
   bottom:28px;
-  transform:translate(-50%,8px);
+  transform:translate(-50%,8px) scale(1);
   z-index:5;
   display:inline-flex;
   align-items:center;
   justify-content:center;
   gap:8px;
-  width:min(92%,480px);
-  padding:18px 28px;
+  width:min(92%,520px);
+  padding:20px 30px;
   border-radius:999px;
-  background:var(--gold);
-  color:var(--dark);
+  background:linear-gradient(135deg,#ff3b30,var(--gold));
+  color:#1a1200;
   font-family:var(--f-nav);
-  font-weight:800;
-  font-size:20px;
-  letter-spacing:.3px;
+  font-weight:900;
+  font-size:22px;
+  letter-spacing:.4px;
   text-transform:uppercase;
   text-align:center;
-  border:2px solid rgba(255,255,255,.85);
-  box-shadow:0 10px 26px rgba(0,0,0,.55), 0 0 0 1px rgba(0,0,0,.25) inset;
+  border:3px solid #fff;
+  box-shadow:0 12px 32px rgba(0,0,0,.6), 0 0 0 1px rgba(0,0,0,.3) inset;
   opacity:0;
   pointer-events:none;
   visibility:hidden;
@@ -134,17 +134,17 @@ img{max-width:100%;display:block;}
   opacity:1;
   visibility:visible;
   pointer-events:auto;
-  transform:translate(-50%,0);
-  animation:hero-cta-blink 1s ease-in-out infinite;
+  transform:translate(-50%,0) scale(1);
+  animation:hero-cta-blink .85s ease-in-out infinite;
 }
 @keyframes hero-cta-blink{
-  0%, 100% { opacity:1; box-shadow:0 6px 18px rgba(0,0,0,.35), 0 0 0 1px rgba(255,255,255,.2) inset, 0 0 0 0 rgba(255,214,0,.55); }
-  50% { opacity:.55; box-shadow:0 6px 18px rgba(0,0,0,.35), 0 0 0 1px rgba(255,255,255,.2) inset, 0 0 0 10px rgba(255,214,0,0); }
+  0%, 100% { opacity:1; transform:translate(-50%,0) scale(1); box-shadow:0 8px 24px rgba(0,0,0,.4), 0 0 0 1px rgba(255,255,255,.25) inset, 0 0 0 0 rgba(255,59,48,.65); }
+  50% { opacity:.7; transform:translate(-50%,0) scale(1.07); box-shadow:0 8px 24px rgba(0,0,0,.4), 0 0 0 1px rgba(255,255,255,.25) inset, 0 0 0 16px rgba(255,59,48,0); }
 }
 @media (max-width:768px){
   .hero-promo__cta{
     bottom:18px;
-    padding:14px 20px; font-size:16px; width:92%; white-space:normal;
+    padding:16px 22px; font-size:17px; width:92%; white-space:normal;
   }
 }
 .hero-compact{background:var(--dark);border-top:1px solid rgba(255,255,255,.08);padding:12px 0;}
