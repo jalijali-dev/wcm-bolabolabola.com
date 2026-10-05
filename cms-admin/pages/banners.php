@@ -289,14 +289,14 @@ require dirname(__DIR__) . '/includes/alerts.php';
                 $heightPresetValue = $editRow ? $val($editRow, 'height_preset') : '500';
                 if ($heightPresetValue === '') { $heightPresetValue = '500'; }
                 $heightPresetOptions = [
-                    '400'  => '1920 × 400 — pendek (strip tipis, teks besar di tengah gambar)',
-                    '500'  => '1920 × 500 — sedang, default (pas untuk sebagian besar banner landscape)',
-                    '700'  => '1920 × 700 — tinggi (cocok untuk gambar rasio ~16:9, 1672×941 dst.)',
-                    '800'  => '1920 × 800 — tinggi+ (gambar makin sedikit ke-crop atas/bawah)',
-                    '900'  => '1920 × 900 — ekstra tinggi',
-                    '1000' => '1920 × 1000 — ekstra tinggi (mendekati persegi)',
-                    '1200' => '1920 × 1200 — sangat tinggi (makan banyak tempat di layar)',
-                    '1400' => '1920 × 1400 — paling tinggi (hampir penuh 1 layar desktop, pakai hati-hati)',
+                    '400'  => '1920 x 400 (pendek)',
+                    '500'  => '1920 x 500 (sedang, default)',
+                    '700'  => '1920 x 700 (tinggi)',
+                    '800'  => '1920 x 800',
+                    '900'  => '1920 x 900',
+                    '1000' => '1920 x 1000',
+                    '1200' => '1920 x 1200 (sangat tinggi)',
+                    '1400' => '1920 x 1400 (paling tinggi)',
                 ];
                 ?>
                 <label class="field">Ukuran banner (desktop)
@@ -307,10 +307,10 @@ require dirname(__DIR__) . '/includes/alerts.php';
                     </select>
                     <span class="cms-field-hint" role="note">
                         Angka kedua = tinggi tampilan di layar desktop lebar (1920px). Makin besar angkanya,
-                        makin tinggi banner dan makin sedikit bagian gambar yang ke-crop — tapi makin banyak
-                        makan tempat sebelum konten berita. Kalau gambar kamu rasio ~16:9 (lebar:tinggi ≈ 1.78:1),
-                        <strong>700–800</strong> biasanya paling pas. Pilihan yang sekarang tersimpan:
-                        <strong><?= cms_esc($heightPresetValue) ?></strong>.
+                        makin tinggi banner dan makin sedikit bagian gambar yang ke-crop, tapi makin banyak
+                        makan tempat sebelum konten berita. Kalau gambar kamu rasio landscape biasa (sekitar
+                        16:9, mis. 1672x941), <strong>700-800</strong> biasanya paling pas. Pilihan yang
+                        sekarang tersimpan: <strong><?= cms_esc($heightPresetValue) ?></strong>.
                     </span>
                 </label>
                 <label class="field">Sort order
