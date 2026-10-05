@@ -104,8 +104,8 @@ img{max-width:100%;display:block;}
 .hero-promo__cta{
   position:absolute;
   left:50%;
-  top:50%;
-  transform:translate(-50%,calc(-50% + 8px));
+  bottom:28px;
+  transform:translate(-50%,8px);
   z-index:5;
   display:inline-flex;
   align-items:center;
@@ -122,7 +122,8 @@ img{max-width:100%;display:block;}
   letter-spacing:.3px;
   text-transform:uppercase;
   text-align:center;
-  box-shadow:0 8px 22px rgba(0,0,0,.4), 0 0 0 1px rgba(255,255,255,.2) inset;
+  border:2px solid rgba(255,255,255,.85);
+  box-shadow:0 10px 26px rgba(0,0,0,.55), 0 0 0 1px rgba(0,0,0,.25) inset;
   opacity:0;
   pointer-events:none;
   visibility:hidden;
@@ -133,7 +134,7 @@ img{max-width:100%;display:block;}
   opacity:1;
   visibility:visible;
   pointer-events:auto;
-  transform:translate(-50%,-50%);
+  transform:translate(-50%,0);
   animation:hero-cta-blink 1s ease-in-out infinite;
 }
 @keyframes hero-cta-blink{
@@ -141,14 +142,10 @@ img{max-width:100%;display:block;}
   50% { opacity:.55; box-shadow:0 6px 18px rgba(0,0,0,.35), 0 0 0 1px rgba(255,255,255,.2) inset, 0 0 0 10px rgba(255,214,0,0); }
 }
 @media (max-width:768px){
-  /* Mobile keeps the CTA anchored near the bottom (above the main
-     artwork's lower third) instead of dead-center like desktop. */
   .hero-promo__cta{
-    top:auto; bottom:18px;
+    bottom:18px;
     padding:14px 20px; font-size:16px; width:92%; white-space:normal;
   }
-  .hero-promo__cta{ transform:translate(-50%,8px); }
-  .hero-promo__cta.is-visible{ transform:translate(-50%,0); }
 }
 .hero-compact{background:var(--dark);border-top:1px solid rgba(255,255,255,.08);padding:12px 0;}
 .hero-compact .wrap{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;}
