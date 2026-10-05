@@ -26,12 +26,17 @@ $navCategories = wpm_site_nav_categories();
 $pageTitle = $article['meta_title'] ?: ($article['title'] . ' — ' . WPM_SITE_NAME);
 $metaDescription = $article['meta_description'] ?: $article['excerpt'];
 $activeNavSlug = $article['category_slug'] ?? '';
+$adScope = 'article';
+$adTargetId = (int) $article['page_id'];
+$adMiddle = wpm_ad_row($pdo, 'middle-of-article', 'article', $adTargetId);
+$articleBody = wpm_inject_midpoint((string) $article['content'], $adMiddle);
 $breadcrumbLabel = $article['category_name'] ?: $article['title'];
 require __DIR__ . '/includes/site-header.php';
 ?>
 
 <main class="wrap wpm-article">
   <div>
+    <?= wpm_ad_row($pdo, 'above-article', 'article', $adTargetId) ?>
     <?php if ($article['category_name']): ?><a href="<?= wpm_esc(wpm_category_url($article['category_slug'])) ?>" class="badge <?= $colorClass ?>"><?= wpm_esc($article['category_name']) ?></a><?php endif; ?>
     <h1 class="wpm-article__title"><?= wpm_esc($article['title']) ?></h1>
     <div class="wpm-article__meta"><?= wpm_esc(wpm_time_ago($article['published_at'])) ?> &middot; <?= (int) $article['views'] ?> views</div>
@@ -42,9 +47,10 @@ require __DIR__ . '/includes/site-header.php';
 
     <?= wpm_render_ad_slot($pdo, 'article-before-title', 'article', (int) $article['page_id']) ?>
 
-    <div class="wpm-article__body"><?= $article['content'] ?></div>
+    <div class="wpm-article__body"><?= $articleBody ?></div>
 
     <?= wpm_render_ad_slot($pdo, 'article-after-title', 'article', (int) $article['page_id']) ?>
+    <?= wpm_ad_row($pdo, 'below-article', 'article', $adTargetId) ?>
   </div>
 
   <aside>

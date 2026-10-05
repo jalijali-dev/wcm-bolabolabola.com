@@ -29,6 +29,8 @@ $popular = wpm_get_popular_articles($pdo, 5);
 $pageTitle = $label . ' — ' . WPM_SITE_NAME;
 $metaDescription = 'Kumpulan berita ' . $label . ' terbaru di ' . WPM_SITE_NAME . '.';
 $activeNavSlug = $slug;
+$adScope = 'category';
+$adTargetId = wpm_category_id($pdo, $slug);
 $breadcrumbLabel = $label;
 require __DIR__ . '/includes/site-header.php';
 ?>
@@ -38,7 +40,7 @@ require __DIR__ . '/includes/site-header.php';
     <div class="section-head"><span class="bar"></span><h2><?= wpm_esc($label) ?></h2></div>
 
     <div class="news-list">
-      <?php foreach ($articles as $item): ?>
+      <?php foreach ($articles as $cardNo => $item): ?>
       <div class="news-card">
         <a href="<?= wpm_esc(wpm_article_url($item['slug'])) ?>" class="news-thumb wpm-photo">
           <img src="<?= wpm_esc(wpm_image_url($item['featured_image'])) ?>" alt="<?= wpm_esc($item['title']) ?>">
@@ -52,6 +54,7 @@ require __DIR__ . '/includes/site-header.php';
         </div>
         <a href="<?= wpm_esc(wpm_article_url($item['slug'])) ?>" class="news-cta">Baca</a>
       </div>
+      <?php if ($cardNo === 3) { echo wpm_ad_row($pdo, 'between-article-cards', 'category', $adTargetId); } ?>
       <?php endforeach; ?>
       <?php if (!$articles): ?>
       <p class="sidebar-empty">Belum ada artikel di kategori <?= wpm_esc($label) ?>.</p>

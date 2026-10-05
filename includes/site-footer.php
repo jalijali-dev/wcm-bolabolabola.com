@@ -7,6 +7,9 @@ declare(strict_types=1);
  */
 $navCategories = wpm_site_nav_categories();
 ?>
+<?php $adFooter = wpm_ad_row($pdo, 'footer', $adScope ?? 'global', $adTargetId ?? null); ?>
+<?php if ($adFooter !== ''): ?><div class="wrap"><?= $adFooter ?></div><?php endif; ?>
+
 <footer class="footer">
   <div class="wrap">
     <div class="footer-wordmark">
