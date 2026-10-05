@@ -295,18 +295,40 @@ function wpm_get_category_headlines(PDO $pdo): array
 function wpm_banners_active(PDO $pdo, string $placement): array
 {
     try {
-        $stmt = $pdo->prepare(
-            'SELECT id, title, subtitle, button_text, button_url, desktop_image, mobile_image
-             FROM banners
-             WHERE is_active = 1
-               AND placement = :placement
-               AND (start_date IS NULL OR start_date <= CURDATE())
-               AND (end_date IS NULL OR end_date >= CURDATE())
-             ORDER BY sort_order ASC, id DESC'
-        );
-        $stmt->execute(['placement' => $placement]);
+        try {
+            // height_preset requires the migration in docs/migrations — fall back gracefully
+            // if it hasn't been run yet on this environment.
+            $stmt = $pdo->prepare(
+                "SELECT id, title, subtitle, button_text, button_url, desktop_image, mobile_image, height_preset
+                 FROM banners
+                 WHERE is_active = 1
+                   AND placement = :placement
+                   AND (start_date IS NULL OR start_date <= CURDATE())
+                   AND (end_date IS NULL OR end_date >= CURDATE())
+                 ORDER BY sort_order ASC, id DESC"
+            );
+            $stmt->execute(['placement' => $placement]);
 
-        return $stmt->fetchAll();
+            return $stmt->fetchAll();
+        } catch (PDOException $e) {
+            $stmt = $pdo->prepare(
+                "SELECT id, title, subtitle, button_text, button_url, desktop_image, mobile_image
+                 FROM banners
+                 WHERE is_active = 1
+                   AND placement = :placement
+                   AND (start_date IS NULL OR start_date <= CURDATE())
+                   AND (end_date IS NULL OR end_date >= CURDATE())
+                 ORDER BY sort_order ASC, id DESC"
+            );
+            $stmt->execute(['placement' => $placement]);
+            $rows = $stmt->fetchAll();
+            foreach ($rows as &$row) {
+                $row['height_preset'] = '500';
+            }
+            unset($row);
+
+            return $rows;
+        }
     } catch (Throwable $e) {
         error_log('[wpm_banners_active] ' . $e->getMessage());
 
@@ -434,6 +456,40 @@ function wpm_render_ad_slot(PDO $pdo, string $positionSlug, string $scope, ?int 
     $hrefAttr = $hasLink ? ' href="' . wpm_esc($clickUrl) . '"' . $targetAttr : '';
 
     return '<' . $tag . ' class="wpm-ad-slot wpm-ad-slot--' . wpm_esc($adType) . '"' . $hrefAttr . '>' . $inner . '</' . $tag . '>';
+}
+
+/** Category row id for a nav slug (ads target categories by this id), or null. */
+function wpm_category_id(PDO $pdo, string $slug): ?int
+{
+    try {
+        $stmt = $pdo->prepare('SELECT id FROM article_categories WHERE slug = :slug LIMIT 1');
+        $stmt->execute(['slug' => $slug]);
+        $id = $stmt->fetchColumn();
+
+        return $id === false ? null : (int) $id;
+    } catch (Throwable $e) {
+        return null;
+    }
+}
+
+/** Ad slot wrapped in a spacing row; '' (no wrapper at all) when nothing is booked there. */
+function wpm_ad_row(PDO $pdo, string $positionSlug, string $scope, ?int $targetId = null): string
+{
+    $html = wpm_render_ad_slot($pdo, $positionSlug, $scope, $targetId);
+
+    return $html === '' ? '' : '<div class="wpm-ad-row wpm-ad-row--' . wpm_esc($positionSlug) . '">' . $html . '</div>';
+}
+
+/** Insert $inject after the middle </p> of $html; unchanged when there are < 3 paragraphs. */
+function wpm_inject_midpoint(string $html, string $inject): string
+{
+    if ($inject === '' || preg_match_all('#</p>#i', $html, $m, PREG_OFFSET_CAPTURE) < 3) {
+        return $html;
+    }
+    $mid = $m[0][(int) floor((count($m[0]) - 1) / 2)];
+    $pos = $mid[1] + strlen($mid[0]);
+
+    return substr($html, 0, $pos) . $inject . substr($html, $pos);
 }
 
 // ─── Display helpers ────────────────────────────────────────────────────────

@@ -100,6 +100,10 @@ $subtitle = trim((string) ($_POST['subtitle'] ?? ''));
 $buttonText = trim((string) ($_POST['button_text'] ?? ''));
 $buttonUrl = trim((string) ($_POST['button_url'] ?? ''));
 $placement = trim((string) ($_POST['placement'] ?? ''));
+$heightPreset = trim((string) ($_POST['height_preset'] ?? '500'));
+if (!in_array($heightPreset, ['400', '500', '700'], true)) {
+    $heightPreset = '500';
+}
 $sortOrderRaw = trim((string) ($_POST['sort_order'] ?? '0'));
 $isActive = (int) ($_POST['is_active'] ?? 0) === 1 ? 1 : 0;
 $isAlwaysOn = (int) ($_POST['is_always_on'] ?? 0) === 1;
@@ -177,29 +181,45 @@ if ($uploadResult['errors'] !== []) {
     exit;
 }
 
+$insertParams = [
+    'title' => $title,
+    'subtitle' => $subtitle,
+    'button_text' => $buttonText,
+    'button_url' => $buttonUrl,
+    'desktop_image' => $imagePaths['desktop_image'],
+    'mobile_image' => $imagePaths['mobile_image'],
+    'placement' => $placement,
+    'sort_order' => (int) $sortOrderRaw,
+    'is_active' => $isActive,
+    'start_date' => $startDate,
+    'end_date' => $endDate,
+];
+
 try {
-    $insert = $pdo->prepare(
-        'INSERT INTO banners (
-            title, subtitle, button_text, button_url, desktop_image, mobile_image,
-            placement, sort_order, is_active, start_date, end_date
-        ) VALUES (
-            :title, :subtitle, :button_text, :button_url, :desktop_image, :mobile_image,
-            :placement, :sort_order, :is_active, :start_date, :end_date
-        )'
-    );
-    $insert->execute([
-        'title' => $title,
-        'subtitle' => $subtitle,
-        'button_text' => $buttonText,
-        'button_url' => $buttonUrl,
-        'desktop_image' => $imagePaths['desktop_image'],
-        'mobile_image' => $imagePaths['mobile_image'],
-        'placement' => $placement,
-        'sort_order' => (int) $sortOrderRaw,
-        'is_active' => $isActive,
-        'start_date' => $startDate,
-        'end_date' => $endDate,
-    ]);
+    try {
+        // height_preset requires the migration in docs/migrations — fall back if not run yet.
+        $insert = $pdo->prepare(
+            'INSERT INTO banners (
+                title, subtitle, button_text, button_url, desktop_image, mobile_image,
+                placement, sort_order, is_active, start_date, end_date, height_preset
+            ) VALUES (
+                :title, :subtitle, :button_text, :button_url, :desktop_image, :mobile_image,
+                :placement, :sort_order, :is_active, :start_date, :end_date, :height_preset
+            )'
+        );
+        $insert->execute($insertParams + ['height_preset' => $heightPreset]);
+    } catch (PDOException) {
+        $insert = $pdo->prepare(
+            'INSERT INTO banners (
+                title, subtitle, button_text, button_url, desktop_image, mobile_image,
+                placement, sort_order, is_active, start_date, end_date
+            ) VALUES (
+                :title, :subtitle, :button_text, :button_url, :desktop_image, :mobile_image,
+                :placement, :sort_order, :is_active, :start_date, :end_date
+            )'
+        );
+        $insert->execute($insertParams);
+    }
 
     $successQuery = 'edit=' . (int) $pdo->lastInsertId();
     $_SESSION['cms_flash'] = ['type' => 'success', 'message' => 'Banner created successfully.'];

@@ -71,9 +71,21 @@ $navCategories = wpm_site_nav_categories();
   </div>
 </div>
 
+<?php $adBelowMenu = wpm_ad_row($pdo, 'below-main-menu', $adScope ?? 'global', $adTargetId ?? null); ?>
+<?php if ($adBelowMenu !== ''): ?><div class="wrap"><?= $adBelowMenu ?></div><?php endif; ?>
+
 <?php if (!empty($heroTitle)): ?>
-<?php if (!empty($heroBanners)): $bnMulti = count($heroBanners) > 1; ?>
-<div class="hero-promo" id="hero-promo">
+<?php if (!empty($heroBanners)):
+    $bnMulti = count($heroBanners) > 1;
+    $bnPresetMap = [
+        '400' => ['min' => '128px', 'vw' => '12.8vw', 'max' => '256px', 'ratio' => '2.9167'],
+        '500' => ['min' => '160px', 'vw' => '16vw',   'max' => '320px', 'ratio' => '2.3333'],
+        '700' => ['min' => '224px', 'vw' => '22.4vw', 'max' => '448px', 'ratio' => '1.6667'],
+    ];
+    $bnPresetKey = (string) ($heroBanners[0]['height_preset'] ?? '500');
+    $bnPreset = $bnPresetMap[$bnPresetKey] ?? $bnPresetMap['500'];
+?>
+<div class="hero-promo" id="hero-promo" style="--hero-h-min:<?= wpm_esc($bnPreset['min']) ?>;--hero-h-vw:<?= wpm_esc($bnPreset['vw']) ?>;--hero-h-max:<?= wpm_esc($bnPreset['max']) ?>;--hero-ratio:<?= wpm_esc($bnPreset['ratio']) ?>;">
   <?php foreach ($heroBanners as $bnIdx => $bn):
       $bnDesktop = trim((string) $bn['desktop_image']);
       $bnMobile  = trim((string) $bn['mobile_image']);
@@ -108,12 +120,6 @@ $navCategories = wpm_site_nav_categories();
   })();
   </script>
   <?php endif; ?>
-</div>
-<div class="hero-compact">
-  <div class="wrap">
-    <h1><?= wpm_esc($heroTitle) ?></h1>
-    <?php if (!empty($heroSubtitle)): ?><p><?= wpm_esc($heroSubtitle) ?></p><?php endif; ?>
-  </div>
 </div>
 <?php else: ?>
 <div class="hero-banner">

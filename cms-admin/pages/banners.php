@@ -186,6 +186,7 @@ require dirname(__DIR__) . '/includes/alerts.php';
                         <tr>
                             <th>Title</th>
                             <th>Placement</th>
+                            <th>Size</th>
                             <th>Sort</th>
                             <th>Schedule</th>
                             <th>Status</th>
@@ -195,7 +196,7 @@ require dirname(__DIR__) . '/includes/alerts.php';
                     <tbody>
                         <?php if ($banners === []) : ?>
                             <tr>
-                                <td colspan="6" class="muted">No banners yet.</td>
+                                <td colspan="7" class="muted">No banners yet.</td>
                             </tr>
                         <?php endif; ?>
                         <?php foreach ($banners as $row) : ?>
@@ -203,6 +204,7 @@ require dirname(__DIR__) . '/includes/alerts.php';
                             <tr>
                                 <td><?= cms_esc($val($row, 'title')) ?></td>
                                 <td><code><?= cms_esc($val($row, 'placement')) ?></code></td>
+                                <td><?= cms_esc($val($row, 'height_preset') !== '' ? $val($row, 'height_preset') : '500') ?></td>
                                 <td><?= cms_esc($val($row, 'sort_order')) ?></td>
                                 <td><?= cms_esc($bn_schedule_label($row['start_date'] ?? null, $row['end_date'] ?? null)) ?></td>
                                 <td>
@@ -282,6 +284,14 @@ require dirname(__DIR__) . '/includes/alerts.php';
                 ); ?>
                 <label class="field">Placement
                     <input type="text" name="placement" value="<?= cms_esc($editRow ? $val($editRow, 'placement') : '') ?>" required placeholder="e.g. home_hero">
+                </label>
+                <?php $heightPresetValue = $editRow ? $val($editRow, 'height_preset') : '500'; if ($heightPresetValue === '') { $heightPresetValue = '500'; } ?>
+                <label class="field">Ukuran banner (desktop)
+                    <select name="height_preset" required>
+                        <option value="400"<?= $heightPresetValue === '400' ? ' selected' : '' ?>>1920 × 400 — pendek</option>
+                        <option value="500"<?= $heightPresetValue === '500' ? ' selected' : '' ?>>1920 × 500 — sedang (default)</option>
+                        <option value="700"<?= $heightPresetValue === '700' ? ' selected' : '' ?>>1920 × 700 — tinggi</option>
+                    </select>
                 </label>
                 <label class="field">Sort order
                     <input type="number" name="sort_order" min="0" step="1" value="<?= cms_esc($editRow ? $val($editRow, 'sort_order') : '0') ?>" required>

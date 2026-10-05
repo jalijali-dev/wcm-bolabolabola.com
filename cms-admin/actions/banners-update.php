@@ -25,6 +25,10 @@ $subtitle = trim((string) ($_POST['subtitle'] ?? ''));
 $buttonText = trim((string) ($_POST['button_text'] ?? ''));
 $buttonUrl = trim((string) ($_POST['button_url'] ?? ''));
 $placement = trim((string) ($_POST['placement'] ?? ''));
+$heightPreset = trim((string) ($_POST['height_preset'] ?? '500'));
+if (!in_array($heightPreset, ['400', '500', '700'], true)) {
+    $heightPreset = '500';
+}
 $sortOrderRaw = trim((string) ($_POST['sort_order'] ?? '0'));
 $isActive = (int) ($_POST['is_active'] ?? 0) === 1 ? 1 : 0;
 $isAlwaysOn = (int) ($_POST['is_always_on'] ?? 0) === 1;
@@ -120,36 +124,59 @@ if ($uploadResult['errors'] !== []) {
     exit;
 }
 
+$updateParams = [
+    'title' => $title,
+    'subtitle' => $subtitle,
+    'button_text' => $buttonText,
+    'button_url' => $buttonUrl,
+    'desktop_image' => $imagePaths['desktop_image'],
+    'mobile_image' => $imagePaths['mobile_image'],
+    'placement' => $placement,
+    'sort_order' => (int) $sortOrderRaw,
+    'is_active' => $isActive,
+    'start_date' => $startDate,
+    'end_date' => $endDate,
+    'id' => $updateId,
+];
+
 try {
-    $update = $pdo->prepare(
-        'UPDATE banners
-         SET title = :title,
-             subtitle = :subtitle,
-             button_text = :button_text,
-             button_url = :button_url,
-             desktop_image = :desktop_image,
-             mobile_image = :mobile_image,
-             placement = :placement,
-             sort_order = :sort_order,
-             is_active = :is_active,
-             start_date = :start_date,
-             end_date = :end_date
-         WHERE id = :id'
-    );
-    $update->execute([
-        'title' => $title,
-        'subtitle' => $subtitle,
-        'button_text' => $buttonText,
-        'button_url' => $buttonUrl,
-        'desktop_image' => $imagePaths['desktop_image'],
-        'mobile_image' => $imagePaths['mobile_image'],
-        'placement' => $placement,
-        'sort_order' => (int) $sortOrderRaw,
-        'is_active' => $isActive,
-        'start_date' => $startDate,
-        'end_date' => $endDate,
-        'id' => $updateId,
-    ]);
+    try {
+        // height_preset requires the migration in docs/migrations — fall back if not run yet.
+        $update = $pdo->prepare(
+            'UPDATE banners
+             SET title = :title,
+                 subtitle = :subtitle,
+                 button_text = :button_text,
+                 button_url = :button_url,
+                 desktop_image = :desktop_image,
+                 mobile_image = :mobile_image,
+                 placement = :placement,
+                 sort_order = :sort_order,
+                 is_active = :is_active,
+                 start_date = :start_date,
+                 end_date = :end_date,
+                 height_preset = :height_preset
+             WHERE id = :id'
+        );
+        $update->execute($updateParams + ['height_preset' => $heightPreset]);
+    } catch (PDOException) {
+        $update = $pdo->prepare(
+            'UPDATE banners
+             SET title = :title,
+                 subtitle = :subtitle,
+                 button_text = :button_text,
+                 button_url = :button_url,
+                 desktop_image = :desktop_image,
+                 mobile_image = :mobile_image,
+                 placement = :placement,
+                 sort_order = :sort_order,
+                 is_active = :is_active,
+                 start_date = :start_date,
+                 end_date = :end_date
+             WHERE id = :id'
+        );
+        $update->execute($updateParams);
+    }
 
     foreach (array_unique($uploadResult['delete_after']) as $oldPath) {
         if (is_file($oldPath)) {
