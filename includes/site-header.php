@@ -64,7 +64,6 @@ $navCategories = wpm_site_nav_categories();
       <form class="wpm-search" action="<?= wpm_esc(wpm_base_url('/cari.php')) ?>" method="get" role="search">
         <input type="text" name="q" placeholder="Cari berita bola&hellip;" aria-label="Cari berita">
       </form>
-      <a href="<?= wpm_esc(wpm_base_url('/')) ?>" class="cta">Berlangganan</a>
     </div>
   </div>
 </div>
