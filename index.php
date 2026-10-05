@@ -101,4 +101,6 @@ require __DIR__ . '/includes/site-header.php';
   </aside>
 </main>
 
+<?= wpm_render_popup_ad($pdo, 'homepage-popup', 'homepage') ?>
+
 <?php require __DIR__ . '/includes/site-footer.php'; ?>

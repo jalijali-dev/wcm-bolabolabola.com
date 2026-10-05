@@ -352,7 +352,7 @@ function wpm_increment_views(PDO $pdo, int $pageId): void
 // plumbing shared across projects. Device targeting is stored but not
 // filtered here (no server-side device detection on this frontend).
 
-function wpm_ad_pick(PDO $pdo, string $positionSlug, string $scope, ?int $targetId = null): ?array
+function wpm_ad_pick(PDO $pdo, string $positionSlug, string $scope, ?int $targetId = null, ?string $adType = null): ?array
 {
     try {
         $stmt = $pdo->prepare(
@@ -360,6 +360,7 @@ function wpm_ad_pick(PDO $pdo, string $positionSlug, string $scope, ?int $target
              INNER JOIN ad_positions p ON p.id = a.position_id
              WHERE p.slug = :slug
                AND a.is_active = 1
+               AND (:atype IS NULL OR a.ad_type = :atype2)
                AND (a.start_date IS NULL OR a.start_date <= CURDATE())
                AND (a.end_date IS NULL OR a.end_date >= CURDATE())
                AND (
@@ -371,6 +372,8 @@ function wpm_ad_pick(PDO $pdo, string $positionSlug, string $scope, ?int $target
              LIMIT 1"
         );
         $stmt->bindValue('slug', $positionSlug);
+        $stmt->bindValue('atype', $adType, $adType === null ? PDO::PARAM_NULL : PDO::PARAM_STR);
+        $stmt->bindValue('atype2', $adType, $adType === null ? PDO::PARAM_NULL : PDO::PARAM_STR);
         $stmt->bindValue('scope', $scope);
         $stmt->bindValue('target_id', $targetId, $targetId === null ? PDO::PARAM_NULL : PDO::PARAM_INT);
         $stmt->execute();
@@ -490,6 +493,107 @@ function wpm_inject_midpoint(string $html, string $inject): string
     $pos = $mid[1] + strlen($mid[0]);
 
     return substr($html, 0, $pos) . $inject . substr($html, $pos);
+}
+
+/**
+ * Popup overlay for a position (e.g. 'homepage-popup'). One popup at most:
+ * wpm_ad_pick() returns a single ad per request (rotation between several
+ * active popups), restricted to ad_type = 'popup' so a non-popup ad booked
+ * on this position can't leak into an overlay.
+ *
+ * Whether it actually opens is decided in the browser, per visitor: after the
+ * ad's delay, unless the visitor was already shown a popup on this position
+ * inside the ad's frequency window (session / 24h / every load). The state is
+ * keyed by POSITION, not ad id — otherwise rotation would hand a returning
+ * visitor a "different" popup each reload. The impression is counted when it
+ * really opens (beacon to ad-click.php?imp=1), not on every page render.
+ * CSS/JS are inline on purpose: .htaccess caches *.css/*.js for a month.
+ */
+function wpm_render_popup_ad(PDO $pdo, string $positionSlug, string $scope, ?int $targetId = null): string
+{
+    try {
+        $stmt = $pdo->query('SELECT ads_enabled FROM ad_settings LIMIT 1');
+        $enabled = $stmt ? $stmt->fetchColumn() : 1;
+        if ($enabled !== false && (int) $enabled === 0) {
+            return '';
+        }
+    } catch (Throwable $e) {
+        // no settings row/table yet: ads default to on, like the other slots
+    }
+
+    $ad = wpm_ad_pick($pdo, $positionSlug, $scope, $targetId, 'popup');
+    if ($ad === null || trim((string) $ad['banner_image']) === '') {
+        return '';
+    }
+
+    $adId    = (int) $ad['id'];
+    $delay   = max(0, min(30, (int) ($ad['popup_delay_seconds'] ?? 2)));
+    $freq    = in_array($ad['popup_frequency'] ?? '', ['every_visit', 'once_per_session', 'once_per_day'], true) ? $ad['popup_frequency'] : 'once_per_session';
+    $img     = '<img src="' . wpm_esc(wpm_image_url((string) $ad['banner_image'])) . '" alt="' . wpm_esc((string) ($ad['image_alt'] ?: $ad['name'])) . '" class="wpm-popup__img">';
+    $hasLink = trim((string) $ad['target_url']) !== '';
+    $newTab  = !empty($ad['open_in_new_tab']);
+    $body    = $hasLink
+        ? '<a href="' . wpm_esc(wpm_base_url('/ad-click.php?id=' . $adId)) . '"' . ($newTab ? ' target="_blank" rel="noopener sponsored"' : ' rel="sponsored"') . '>' . $img . '</a>'
+        : $img;
+    $label   = !empty($ad['show_sponsored_label'])
+        ? '<span class="wpm-popup__label">' . wpm_esc((string) ($ad['advertiser_label'] ?: 'Ad')) . '</span>'
+        : '';
+    $cfg = json_encode([
+        'key' => 'wpm_popup_' . $positionSlug,
+        'delay' => $delay,
+        'freq' => $freq,
+        'imp' => wpm_base_url('/ad-click.php?imp=1&id=' . $adId),
+    ], JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP);
+
+    return <<<HTML
+<style>
+.wpm-popup{position:fixed;inset:0;z-index:1500;display:none;align-items:center;justify-content:center;padding:16px;}
+.wpm-popup.is-open{display:flex;}
+.wpm-popup__backdrop{position:absolute;inset:0;background:rgba(0,0,0,.6);}
+.wpm-popup__box{position:relative;max-width:min(520px,92vw);max-height:88vh;background:#fff;border-radius:14px;box-shadow:0 24px 64px rgba(0,0,0,.4);overflow:hidden;}
+.wpm-popup__img{display:block;max-width:100%;max-height:88vh;width:auto;height:auto;margin:0 auto;}
+.wpm-popup__close{position:absolute;top:8px;right:8px;width:34px;height:34px;border-radius:50%;border:0;background:rgba(0,0,0,.65);color:#fff;font-size:20px;line-height:1;cursor:pointer;z-index:2;}
+.wpm-popup__close:hover{background:var(--red,#d81922);}
+.wpm-popup__label{position:absolute;left:8px;top:8px;background:rgba(0,0,0,.6);color:#fff;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:2px 7px;border-radius:4px;z-index:2;}
+</style>
+<div class="wpm-popup" id="wpm-popup" role="dialog" aria-modal="true" aria-label="Iklan">
+  <div class="wpm-popup__backdrop" data-popup-close></div>
+  <div class="wpm-popup__box">
+    {$label}<button type="button" class="wpm-popup__close" data-popup-close aria-label="Tutup iklan">&times;</button>
+    {$body}
+  </div>
+</div>
+<script>
+(function () {
+  var cfg = {$cfg}, el = document.getElementById('wpm-popup');
+  if (!el) return;
+  function seen() {
+    try {
+      if (cfg.freq === 'every_visit') return false;
+      if (cfg.freq === 'once_per_session') return !!sessionStorage.getItem(cfg.key);
+      var t = parseInt(localStorage.getItem(cfg.key) || '0', 10);
+      return t > 0 && Date.now() - t < 86400000;
+    } catch (e) { return false; }
+  }
+  function mark() {
+    try {
+      if (cfg.freq === 'once_per_session') sessionStorage.setItem(cfg.key, '1');
+      else if (cfg.freq === 'once_per_day') localStorage.setItem(cfg.key, String(Date.now()));
+    } catch (e) {}
+  }
+  function close() { el.classList.remove('is-open'); }
+  el.addEventListener('click', function (e) { if (e.target.closest('[data-popup-close]')) close(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+  if (seen()) return;
+  setTimeout(function () {
+    if (seen() && cfg.freq !== 'every_visit') return;   // another tab got there first
+    el.classList.add('is-open');
+    mark();
+    if (navigator.sendBeacon) navigator.sendBeacon(cfg.imp);
+  }, cfg.delay * 1000);
+})();
+</script>
+HTML;
 }
 
 // ─── Display helpers ────────────────────────────────────────────────────────

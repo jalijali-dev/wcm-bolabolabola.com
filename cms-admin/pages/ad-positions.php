@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../includes/auth.php';
 require_once dirname(__DIR__) . '/config/database.php';
+require_once dirname(__DIR__) . '/includes/ad-helpers.php';
 require_once dirname(__DIR__) . '/includes/schema-guard.php';
 
 // Site-wide configuration is admin-tier — see cms_require_role() in
@@ -18,6 +19,8 @@ cms_ensure_table(
      created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
      UNIQUE KEY uniq_ad_position_slug (slug)'
 );
+
+cms_ad_seed_positions($pdo);
 
 $pageTitle = 'Ad Positions';
 $currentNav = 'ad-positions';

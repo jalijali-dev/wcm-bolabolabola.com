@@ -14,6 +14,20 @@ require_once __DIR__ . '/includes/site-bootstrap.php';
 $id = (int) ($_GET['id'] ?? 0);
 $targetUrl = null;
 
+// ?imp=1: impression beacon from the popup (counted when it actually opens,
+// not on every page render). No redirect — just 204.
+if (($_GET['imp'] ?? '') === '1') {
+    if ($id > 0) {
+        try {
+            $pdo->prepare('UPDATE advertisements SET impressions = impressions + 1 WHERE id = :id AND is_active = 1')->execute(['id' => $id]);
+        } catch (Throwable $e) {
+            // best-effort
+        }
+    }
+    http_response_code(204);
+    exit;
+}
+
 if ($id > 0) {
     try {
         $stmt = $pdo->prepare('SELECT target_url FROM advertisements WHERE id = :id AND is_active = 1 LIMIT 1');

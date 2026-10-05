@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../includes/auth.php';
 require_once dirname(__DIR__) . '/config/database.php';
+require_once dirname(__DIR__) . '/includes/ad-helpers.php';
 require_once dirname(__DIR__) . '/includes/schema-guard.php';
 
 // Site-wide configuration is admin-tier — see cms_require_role() in
@@ -94,7 +95,9 @@ try {
     // MODIFY isn't an "add if missing" operation like cms_ensure_column, but
     // MySQL/MariaDB MODIFY COLUMN is naturally idempotent (safe to re-run
     // with the same definition every page load) so no separate guard needed.
-    $pdo->exec("ALTER TABLE `advertisements` MODIFY COLUMN `ad_type` ENUM('image','html','video','text','external_code') NOT NULL DEFAULT 'image'");
+    $pdo->exec("ALTER TABLE `advertisements` MODIFY COLUMN `ad_type` ENUM('image','html','video','text','external_code','popup') NOT NULL DEFAULT 'image'");
+    cms_ensure_column($pdo, 'advertisements', 'popup_delay_seconds', 'INT UNSIGNED NOT NULL DEFAULT 2 AFTER `external_code`');
+    cms_ensure_column($pdo, 'advertisements', 'popup_frequency', "ENUM('every_visit','once_per_session','once_per_day') NOT NULL DEFAULT 'once_per_session' AFTER `popup_delay_seconds`");
     $pdo->exec("ALTER TABLE `advertisements` MODIFY COLUMN `device` ENUM('all','desktop','mobile','tablet') NOT NULL DEFAULT 'all'");
     // 'football'/'basket' added 11 Agu 2026 — operator wants to target ads
     // specifically at football.php/basket.php (their sidebar-right slot
@@ -113,16 +116,7 @@ try {
     // Seed the new position keys (section 5) without touching/removing the
     // existing ones — 'sidebar' is kept for backward compat (see the
     // one-time reassignment below) even though nothing renders it anymore.
-    $newPositions = [
-        'Article — Before Title'  => 'article-before-title',
-        'Article — After Title'   => 'article-after-title',
-        'Sidebar (Left)'          => 'sidebar-left',
-        'Sidebar (Right)'         => 'sidebar-right',
-    ];
-    $seedStmt2 = $pdo->prepare('INSERT IGNORE INTO ad_positions (name, slug) VALUES (:name, :slug)');
-    foreach ($newPositions as $posName => $posSlug) {
-        $seedStmt2->execute(['name' => $posName, 'slug' => $posSlug]);
-    }
+    cms_ad_seed_positions($pdo);
 
     // One-time migration: the old 'sidebar' position used to render TWICE
     // (both article sidebars called the same slug — the duplicate-ad bug
@@ -153,6 +147,7 @@ $AD_TYPES = [
     'text'          => 'Text Ad',
     'image'         => 'Image Banner',
     'video'         => 'Video Ad',
+    'popup'         => 'Popup Ad',
     'html'          => 'Custom HTML',
     'external_code' => 'External Ad Code',
 ];
@@ -283,6 +278,8 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     $videoAutoplay      = ($videoMuted && !empty($_POST['video_autoplay'])) ? 1 : 0; // autoplay only ever honoured when muted
     $videoLoop          = !empty($_POST['video_loop']) ? 1 : 0;
     $videoControls      = !empty($_POST['video_controls']) ? 1 : 0;
+    $popupDelay         = max(0, min(30, (int) ($_POST['popup_delay_seconds'] ?? 2)));
+    $popupFrequency     = in_array($_POST['popup_frequency'] ?? '', ['every_visit', 'once_per_session', 'once_per_day'], true) ? $_POST['popup_frequency'] : 'once_per_session';
     $htmlCodeRaw        = trim((string) ($_POST['html_code'] ?? ''));
     $externalCodeRaw    = trim((string) ($_POST['external_code'] ?? ''));
     $targetUrl          = trim((string) ($_POST['target_url'] ?? ''));
@@ -335,6 +332,9 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
             if ($bannerImage === '') { $errors[] = 'Banner image is required for Image Banner.'; }
             if ($targetUrl === '') { $errors[] = 'Target URL is required for Image Banner.'; }
             break;
+        case 'popup':
+            if ($bannerImage === '') { $errors[] = 'Popup image is required for Popup Ad.'; }
+            break;
         case 'video':
             if ($videoPath === '' && $videoUrl === '') { $errors[] = 'A video file (Media Library) or video URL is required.'; }
             break;
@@ -384,6 +384,8 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
         'video_controls'       => $videoControls,
         'html_code'            => $htmlCode,
         'external_code'        => $externalCode,
+        'popup_delay_seconds'  => $popupDelay,
+        'popup_frequency'      => $popupFrequency,
         'target_url'           => $targetUrl !== '' ? $targetUrl : null,
         'cta_text'             => $ctaText !== '' ? $ctaText : null,
         'open_in_new_tab'      => $openInNewTab,
@@ -676,6 +678,23 @@ require dirname(__DIR__) . '/includes/alerts.php';
                 </label>
             </div>
 
+            <!-- ── Popup Ad settings (uses the banner image + target URL above/below) ── -->
+            <div class="ad-form-section ad-field-popup">
+                <div class="ad-form-section__title">Popup Ad</div>
+                <p class="field__hint" style="margin:0 0 8px">Uses the banner image from the "Image Banner" fields above plus the Target URL. Shows as a centred overlay on the position's page (e.g. Homepage Popup).</p>
+                <label class="field">Delay before showing (seconds)
+                    <input type="number" name="popup_delay_seconds" min="0" max="30" step="1" value="<?= $adForm ? (int) ($adForm['popup_delay_seconds'] ?? 2) : 2 ?>">
+                </label>
+                <label class="field">How often per visitor
+                    <?php $curFreq = $adForm ? (string) ($adForm['popup_frequency'] ?? 'once_per_session') : 'once_per_session'; ?>
+                    <select name="popup_frequency">
+                        <option value="once_per_session"<?= $curFreq === 'once_per_session' ? ' selected' : '' ?>>Once per browser session</option>
+                        <option value="once_per_day"<?= $curFreq === 'once_per_day' ? ' selected' : '' ?>>Once per 24 hours</option>
+                        <option value="every_visit"<?= $curFreq === 'every_visit' ? ' selected' : '' ?>>Every page load</option>
+                    </select>
+                </label>
+            </div>
+
             <!-- ── Video Ad fields ────────────────────────────────────── -->
             <div class="ad-form-section ad-field-video">
                 <div class="ad-form-section__title">Video Ad</div>
@@ -914,6 +933,7 @@ require dirname(__DIR__) . '/includes/alerts.php';
     var fieldGroups = {
         text: document.querySelector('.ad-field-text'),
         image: document.querySelector('.ad-field-image'),
+        popup: document.querySelector('.ad-field-popup'),
         video: document.querySelector('.ad-field-video'),
         html: document.querySelector('.ad-field-html'),
         external_code: document.querySelector('.ad-field-external_code')
@@ -922,7 +942,9 @@ require dirname(__DIR__) . '/includes/alerts.php';
     function syncType() {
         var t = typeSelect.value;
         Object.keys(fieldGroups).forEach(function (key) {
-            if (fieldGroups[key]) { fieldGroups[key].style.display = (key === t) ? '' : 'none'; }
+            // The popup reuses the Image Banner fields (image path + alt).
+            var on = (key === t) || (key === 'image' && t === 'popup');
+            if (fieldGroups[key]) { fieldGroups[key].style.display = on ? '' : 'none'; }
         });
         updatePreview();
     }
@@ -1045,7 +1067,7 @@ require dirname(__DIR__) . '/includes/alerts.php';
                 + '<div class="ad-preview__headline">' + (esc(fieldVal('headline')) || '<span class="ad-preview__placeholder">Headline will appear here</span>') + '</div>'
                 + (fieldVal('description') ? '<div class="ad-preview__desc">' + esc(fieldVal('description')) + '</div>' : '')
                 + (fieldVal('cta_text') ? '<div class="ad-preview__cta">' + esc(fieldVal('cta_text')) + ' &rarr;</div>' : '');
-        } else if (t === 'image') {
+        } else if (t === 'image' || t === 'popup') {
             var imgPath = fieldVal('banner_image');
             html = imgPath
                 ? '<img class="ad-preview__img" src="' + publicUrl(imgPath) + '" alt="' + esc(fieldVal('image_alt')) + '">'
