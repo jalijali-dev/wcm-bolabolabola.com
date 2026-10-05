@@ -72,12 +72,57 @@ $navCategories = wpm_site_nav_categories();
 </div>
 
 <?php if (!empty($heroTitle)): ?>
+<?php if (!empty($heroBanners)): $bnMulti = count($heroBanners) > 1; ?>
+<div class="hero-promo" id="hero-promo">
+  <?php foreach ($heroBanners as $bnIdx => $bn):
+      $bnDesktop = trim((string) $bn['desktop_image']);
+      $bnMobile  = trim((string) $bn['mobile_image']);
+      $bnMain    = $bnDesktop !== '' ? $bnDesktop : $bnMobile;   // desktop first, mobile as fallback
+      $bnUrl     = trim((string) $bn['button_url']);
+  ?>
+  <a href="<?= wpm_esc($bnUrl !== '' ? $bnUrl : '#') ?>" class="hero-promo__slide<?= $bnIdx === 0 ? ' is-active' : '' ?>">
+    <picture>
+      <?php if ($bnMobile !== '' && $bnDesktop !== ''): ?><source media="(max-width:768px)" srcset="<?= wpm_esc(wpm_image_url($bnMobile)) ?>"><?php endif; ?>
+      <img src="<?= wpm_esc(wpm_image_url($bnMain)) ?>" alt="<?= wpm_esc((string) $bn['title']) ?>" class="hero-promo__img">
+    </picture>
+  </a>
+  <?php endforeach; ?>
+  <?php if ($bnMulti): ?>
+  <div class="hero-promo__nav">
+    <button type="button" class="hero-promo__btn" data-dir="-1" aria-label="Banner sebelumnya">&lsaquo;</button>
+    <button type="button" class="hero-promo__btn" data-dir="1" aria-label="Banner berikutnya">&rsaquo;</button>
+  </div>
+  <script>
+  (function () {
+    var box = document.getElementById('hero-promo');
+    var slides = box.querySelectorAll('.hero-promo__slide');
+    var i = 0, timer;
+    function go(n) { slides[i].classList.remove('is-active'); i = (n + slides.length) % slides.length; slides[i].classList.add('is-active'); }
+    function auto() { clearInterval(timer); timer = setInterval(function () { go(i + 1); }, 6000); }
+    box.querySelectorAll('.hero-promo__btn').forEach(function (b) {
+      b.addEventListener('click', function () { go(i + parseInt(b.getAttribute('data-dir'), 10)); auto(); });
+    });
+    box.addEventListener('mouseenter', function () { clearInterval(timer); });
+    box.addEventListener('mouseleave', auto);
+    auto();
+  })();
+  </script>
+  <?php endif; ?>
+</div>
+<div class="hero-compact">
+  <div class="wrap">
+    <h1><?= wpm_esc($heroTitle) ?></h1>
+    <?php if (!empty($heroSubtitle)): ?><p><?= wpm_esc($heroSubtitle) ?></p><?php endif; ?>
+  </div>
+</div>
+<?php else: ?>
 <div class="hero-banner">
   <div class="hero-banner-title">
     <h1><?= wpm_esc($heroTitle) ?></h1>
     <?php if (!empty($heroSubtitle)): ?><p><?= wpm_esc($heroSubtitle) ?></p><?php endif; ?>
   </div>
 </div>
+<?php endif; ?>
 <div class="hero-strip">
   <div class="wrap">
     <?php foreach ($navCategories as $navSlug => $navLabel): ?>

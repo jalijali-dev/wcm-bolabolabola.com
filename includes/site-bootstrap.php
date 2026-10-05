@@ -285,6 +285,35 @@ function wpm_get_category_headlines(PDO $pdo): array
     return $out;
 }
 
+/**
+ * Active banners for a placement (e.g. 'home_hero'), set up in
+ * cms-admin → Banners. Active = is_active=1, placement matches, and today
+ * falls inside start_date/end_date (either or both may be empty = no limit).
+ * Ordered by sort_order. Never throws: on any DB problem returns [] so a
+ * banner-table hiccup can't take the public site down.
+ */
+function wpm_banners_active(PDO $pdo, string $placement): array
+{
+    try {
+        $stmt = $pdo->prepare(
+            'SELECT id, title, subtitle, button_text, button_url, desktop_image, mobile_image
+             FROM banners
+             WHERE is_active = 1
+               AND placement = :placement
+               AND (start_date IS NULL OR start_date <= CURDATE())
+               AND (end_date IS NULL OR end_date >= CURDATE())
+             ORDER BY sort_order ASC, id DESC'
+        );
+        $stmt->execute(['placement' => $placement]);
+
+        return $stmt->fetchAll();
+    } catch (Throwable $e) {
+        error_log('[wpm_banners_active] ' . $e->getMessage());
+
+        return [];
+    }
+}
+
 function wpm_increment_views(PDO $pdo, int $pageId): void
 {
     try {

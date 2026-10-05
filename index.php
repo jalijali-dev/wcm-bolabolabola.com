@@ -11,6 +11,12 @@ $highlightRows = wpm_get_articles($pdo, 4, 8, null);
 $pageTitle = WPM_SITE_NAME . ' — ' . WPM_SITE_TAGLINE;
 $metaDescription = 'Berita bola dan update olahraga terkini di ' . WPM_SITE_NAME . ': Sepak Bola, Basket, Voli, dan Bursa Transfer.';
 $activeNavSlug = 'home';
+// Active "home_hero" banners (cms-admin → Banners) replace the big hero block.
+// Rows without any image are skipped; more than one becomes a slider.
+$heroBanners = array_values(array_filter(
+    wpm_banners_active($pdo, 'home_hero'),
+    static fn (array $r): bool => trim((string) $r['desktop_image']) !== '' || trim((string) $r['mobile_image']) !== ''
+));
 $heroTitle = 'Sorotan Utama';
 $heroSubtitle = 'Berita bola & olahraga terkini — diperbarui setiap hari';
 require __DIR__ . '/includes/site-header.php';
