@@ -1,5 +1,26 @@
 RewriteEngine On
 
+# ===== Hide .php extension from the address bar =====
+# /cari.php (and any other bare *.php file) -> /cari in the browser, so
+# links, bookmarks, and shares never show the file extension. Internal
+# rewrites below (artikel/, kategori/, live/) are untouched since the
+# browser never sees .php for those anyway.
+
+# index.php specifically -> root, not /index
+RewriteCond %{THE_REQUEST} \s/+index\.php[\s?] [NC]
+RewriteRule ^ /? [R=301,L]
+
+# any other *.php -> same path without the extension (query string kept)
+RewriteCond %{THE_REQUEST} \s/+([^?\s]+)\.php[\s?] [NC]
+RewriteRule ^ /%1 [R=301,L]
+
+# serve /cari (and similar) from cari.php internally, no visible redirect
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{DOCUMENT_ROOT}/$1.php -f
+RewriteRule ^([^/]+)$ $1.php [L,QSA]
+
+
 # Blokir akses publik ke file/folder yang ikut ter-deploy (rsync .cpanel.yml
 # nyalin semuanya) tapi tidak boleh diakses langsung lewat browser — bukan
 # bagian runtime aplikasi, cuma dokumentasi/riwayat git.

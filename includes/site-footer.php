@@ -25,7 +25,7 @@ $navCategories = wpm_site_nav_categories();
         <h5>Berita</h5>
         <a href="<?= wpm_esc(wpm_base_url('/')) ?>">Terbaru</a>
         <a href="<?= wpm_esc(wpm_base_url('/')) ?>">Sorotan</a>
-        <a href="<?= wpm_esc(wpm_base_url('/cari.php')) ?>">Cari Berita</a>
+        <a href="<?= wpm_esc(wpm_base_url('/cari')) ?>">Cari Berita</a>
       </div>
       <div>
         <h5>Kategori</h5>
@@ -118,7 +118,7 @@ $navCategories = wpm_site_nav_categories();
     <div class="wpm-mobilemenu__handle"></div>
     <a href="<?= wpm_esc(wpm_category_url('basket')) ?>" class="wpm-mobilemenu__link">Basket</a>
     <a href="<?= wpm_esc(wpm_category_url('voli')) ?>" class="wpm-mobilemenu__link">Voli</a>
-    <a href="<?= wpm_esc(wpm_base_url('/cari.php')) ?>" class="wpm-mobilemenu__link">Cari Berita</a>
+    <a href="<?= wpm_esc(wpm_base_url('/cari')) ?>" class="wpm-mobilemenu__link">Cari Berita</a>
     <a href="<?= wpm_esc(wpm_base_url('/')) ?>" class="wpm-mobilemenu__link">Redaksi</a>
     <a href="<?= wpm_esc(wpm_base_url('/')) ?>" class="wpm-mobilemenu__link">Kontak</a>
     <a href="<?= wpm_esc(wpm_base_url('/')) ?>" class="wpm-mobilemenu__link">Kirim Berita</a>
