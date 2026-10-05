@@ -102,7 +102,7 @@ $editId = isset($_GET['edit']) ? (int) $_GET['edit'] : 0;
 $editRow = null;
 
 $listStmt = $pdo->query(
-    'SELECT id, title, placement, sort_order, is_active, start_date, end_date, button_url
+    'SELECT id, title, placement, sort_order, is_active, start_date, end_date, button_url, height_preset
      FROM banners
      ORDER BY sort_order ASC, id DESC'
 );
@@ -111,7 +111,7 @@ $banners = $listStmt->fetchAll();
 if ($editId > 0) {
     $editStmt = $pdo->prepare(
         'SELECT id, title, subtitle, button_text, button_url, desktop_image, mobile_image,
-                placement, sort_order, is_active, start_date, end_date
+                placement, sort_order, is_active, start_date, end_date, height_preset
          FROM banners
          WHERE id = :id
          LIMIT 1'
