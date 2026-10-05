@@ -277,6 +277,15 @@ img{max-width:100%;display:block;}
 .live-video-wrap{position:relative;width:100%;padding-bottom:56.25%;height:0;background:#000;border-radius:12px;overflow:hidden;margin-bottom:22px;}
 .live-video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;}
 
+.live-layout.has-side{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:24px;align-items:start;}
+.live-main{min-width:0;}
+.live-side{position:sticky;top:16px;}
+.live-side .wpm-ad-slot{margin-bottom:0;}
+.live-side img{width:100%;height:auto;display:block;}
+@media (max-width:900px){
+  .live-layout.has-side{display:block;}
+  .live-side{position:static;margin-top:18px;max-width:300px;margin-left:auto;margin-right:auto;}
+}
 .live-desc{font-size:14.5px;line-height:1.7;color:var(--grey-1);max-width:760px;}
 
 /* ── Responsive ── */

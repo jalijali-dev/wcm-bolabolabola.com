@@ -23,6 +23,9 @@ function cms_ad_default_positions(): array
         'below-article'           => 'Article — Below Article',
         'footer'                  => 'Footer (above footer, all pages)',
         'homepage-popup'          => 'Homepage Popup (overlay)',
+        'stream-above-player'     => 'Live Stream — Above Player',
+        'stream-below-player'     => 'Live Stream — Below Player',
+        'stream-sidebar'          => 'Live Stream — Sidebar (300x600)',
     ];
 }
 

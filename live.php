@@ -92,6 +92,17 @@ require __DIR__ . '/includes/site-header.php';
   <?php if (!empty($match['league_name'])): ?><div class="live-league"><?= wpm_esc((string) $match['league_name']) ?></div><?php endif; ?>
   <h1 class="live-title"><?= wpm_esc($displayTitle) ?></h1>
 
+  <?php
+    // Stream-page ad slots. They only exist on this page, so 'global' ads
+    // booked on them can't leak elsewhere. Empty slot => '' (no wrapper).
+    $adAbove = wpm_ad_row($pdo, 'stream-above-player', 'global');
+    $adBelow = wpm_ad_row($pdo, 'stream-below-player', 'global');
+    $adSide  = wpm_render_ad_slot($pdo, 'stream-sidebar', 'global');
+  ?>
+  <?= $adAbove ?>
+
+  <div class="live-layout<?= $adSide !== '' ? ' has-side' : '' ?>">
+  <div class="live-main">
   <?php if ($homeName !== '' || $awayName !== ''): ?>
   <div class="live-teams">
     <div class="live-team">
@@ -117,9 +128,16 @@ require __DIR__ . '/includes/site-header.php';
     <?= (string) ($match['embed_code'] ?? '') ?>
   </div>
 
+  <?= $adBelow ?>
+
   <?php if (!empty($match['stream_description'])): ?>
   <p class="live-desc"><?= wpm_esc((string) $match['stream_description']) ?></p>
   <?php endif; ?>
+  </div>
+  <?php if ($adSide !== ''): ?>
+  <aside class="live-side"><?= $adSide ?></aside>
+  <?php endif; ?>
+  </div>
 
 <?php else: ?>
   <div class="wpm-empty-state">
