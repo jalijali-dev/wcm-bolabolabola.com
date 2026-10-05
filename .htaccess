@@ -6,15 +6,20 @@ RewriteEngine On
 # rewrites below (artikel/, kategori/, live/) are untouched since the
 # browser never sees .php for those anyway.
 
-# index.php specifically -> root, not /index
+# index.php specifically -> root, not /index (skip cms-admin entirely)
+RewriteCond %{REQUEST_URI} !^/cms-admin
 RewriteCond %{THE_REQUEST} \s/+index\.php[\s?] [NC]
 RewriteRule ^ /? [R=301,L]
 
-# any other *.php -> same path without the extension (query string kept)
+# any other *.php at the site root -> same path without the extension
+# (cms-admin keeps its .php URLs untouched -- it's a multi-folder app,
+# not a single flat file like cari.php, so this rule must not touch it)
+RewriteCond %{REQUEST_URI} !^/cms-admin
 RewriteCond %{THE_REQUEST} \s/+([^?\s]+)\.php[\s?] [NC]
 RewriteRule ^ /%1 [R=301,L]
 
-# serve /cari (and similar) from cari.php internally, no visible redirect
+# serve /cari (and similar single-segment paths) from cari.php internally
+RewriteCond %{REQUEST_URI} !^/cms-admin
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{DOCUMENT_ROOT}/$1.php -f
